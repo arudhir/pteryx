@@ -97,10 +97,10 @@ push:
 deploy: image
 	docker tag \
 		$(BUILD_IMAGE) \
-		docker.ginkgobioworks.com/$(CI_PROJECT_PATH)
+		docker.arudhir.com/$(CI_PROJECT_PATH)
 	@echo tagged pteryx image
 	docker push \
-		docker.ginkgobioworks.com/$(CI_PROJECT_PATH)
+		docker.arudhir.com/$(CI_PROJECT_PATH)
 	@echo pushed pteryx image
 	
 # --- Testing ---
