@@ -1,8 +1,7 @@
-# bbypteryx
+# pteryx
 
 **Version: 0.1.0**
 
-[![pipeline status](https://git.ginkgobioworks.com/ngs-analysis/pteryx/badges/master/pipeline.svg)](https://git.ginkgobioworks.com/ngs-analysis/pteryx/-/commits/master)
 ![](docs/images/archen-small.png)
 
 ![](dag.png)
@@ -45,7 +44,7 @@ Before you spend time working on it, let's make sure that it works. If it doesn'
 
 Clone the repo and run the tests in a Docker container
 ```console
-git clone git@git.ginkgobioworks.com:ngs-analysis/pteryx.git
+git clone https://github.com/arudhir/pteryx.git
 cd pteryx
 make test-ext
 ```
@@ -141,10 +140,11 @@ docker-compose run --rm pteryx pteryx --ont 7023636 6254004
 
 ## Genome Assembly Talk
 
-https://docs.google.com/presentation/d/1RirdN_YK9MxDWAGcquSOi_uq20dNsN6jI3yxUBe-pSA
+<redacted>
 
 ## Trycycler
-https://ginkgobioworks.atlassian.net/wiki/spaces/NGS/pages/480382563/Trycycler
+
+https://github.com/rrwick/Trycycler
 
 ## Misc
 
