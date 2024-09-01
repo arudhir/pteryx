@@ -1,0 +1,150 @@
+import pytest
+import conftest
+from conftest import *
+import multiprocessing
+from ginkgo_common.utils import setup_batch_env, run_executable
+
+# @pytest.mark.slow
+def test_shasta():
+    resp = run_executable(
+        executable='pteryx',
+        parameters={
+            'targets': 'shasta',
+            'threads': multiprocessing.cpu_count(),
+            'ilmn': 'tests/fixtures/mesoplasma/mesoplasma_simulated.1.paired.fq.gz',
+            'ont': 'tests/fixtures/mesoplasma/mesoplasma_simulated.ont.fq.gz'
+        }
+    )
+    print(resp)
+    assert(resp['success'])
+
+# @pytest.mark.slow
+def test_spades():
+    resp = run_executable(
+        executable='pteryx',
+        parameters={
+            'targets': 'spades',
+            'threads': multiprocessing.cpu_count(),
+            'ilmn': 'tests/fixtures/mesoplasma/mesoplasma_simulated.1.paired.fq.gz',
+            'ont': 'tests/fixtures/mesoplasma/mesoplasma_simulated.ont.fq.gz'
+        }
+    )
+    print(resp)
+    assert(resp['success'])
+
+    # resp = run_executable(
+    #     executable='snakemake',
+    #     arguments=['spades'],
+    #     parameters={
+    #         'snakefile': SNAKEFILE,
+    #         'cores': multiprocessing.cpu_count(),
+    #         'configfile': CONFIGFILE
+    #     }
+    # )
+    # print(resp)
+    # assert(resp['success'])
+    
+@pytest.mark.slow
+def test_skesa(SNAKEFILE, CONFIGFILE):
+    resp = run_executable(
+        executable='snakemake',
+        arguments=['skesa'],
+        parameters={
+            'snakefile': SNAKEFILE,
+            'cores': multiprocessing.cpu_count(),
+            'configfile': CONFIGFILE
+        }
+    )
+    assert(resp['success'])
+
+@pytest.mark.slow
+def test_hybridspades(SNAKEFILE, CONFIGFILE):
+    resp = run_executable(
+        executable='snakemake',
+        arguments=[
+            'hybridspades',
+            'biosyntheticspades',
+            'metaspades'
+        ],
+        parameters={
+            'snakefile': SNAKEFILE,
+            'cores': multiprocessing.cpu_count(),
+            'configfile': CONFIGFILE
+        }
+    )
+    assert(resp['success'])
+
+# def test_hybridspades(SNAKEFILE, CONFIGFILE):
+    # resp = run_executable(
+        # executable='snakemake',
+        # arguments=['hybridspades'],
+        # parameters={
+            # 'snakefile': SNAKEFILE,
+            # 'cores': multiprocessing.cpu_count(),
+            # 'configfile': CONFIGFILE
+        # }
+    # )
+    # assert(resp['success'])
+
+# def test_metaspades(SNAKEFILE, CONFIGFILE):
+    # resp = run_executable(
+        # executable='snakemake',
+        # arguments=['metaspades'],
+        # parameters={
+            # 'snakefile': SNAKEFILE,
+            # 'cores': multiprocessing.cpu_count(),
+            # 'configfile': CONFIGFILE
+        # }
+    # )
+    # assert(resp['success'])
+
+# def test_biosyntheticspades(SNAKEFILE, CONFIGFILE):
+    # resp = run_executable(
+        # executable='snakemake',
+        # arguments=['biosyntheticspades'],
+        # parameters={
+            # 'snakefile': SNAKEFILE,
+            # 'cores': multiprocessing.cpu_count(),
+            # 'configfile': CONFIGFILE
+        # }
+    # )
+   # assert(resp['success'])
+
+def test_flye():
+    resp = run_executable(
+        executable='pteryx',
+        parameters={
+            'targets': 'flye',
+            'threads': multiprocessing.cpu_count(),
+            'ilmn': 'tests/fixtures/mesoplasma/mesoplasma_simulated.1.paired.fq.gz',
+            'ont': 'tests/fixtures/mesoplasma/mesoplasma_simulated.ont.fq.gz'
+        }
+    )
+    print(resp)
+    assert(resp['success'])
+
+@pytest.mark.slow
+def test_canu(SNAKEFILE, CONFIGFILE):
+    resp = run_executable(
+        executable='snakemake',
+        arguments=['canu'],
+        parameters={
+            'snakefile': SNAKEFILE,
+            'cores': multiprocessing.cpu_count(),
+            'configfile': CONFIGFILE
+        }
+    )
+    assert(resp['success'])
+
+@pytest.mark.slow
+def test_unicycler(SNAKEFILE, CONFIGFILE):
+    resp = run_executable(
+        executable='snakemake',
+        arguments=['canu'],
+        parameters={
+            'snakefile': SNAKEFILE,
+            'cores': multiprocessing.cpu_count(),
+            'configfile': CONFIGFILE
+        }
+    )
+    assert(resp['success'])

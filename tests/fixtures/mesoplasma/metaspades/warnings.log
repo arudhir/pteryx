@@ -1,0 +1,4 @@
+
+=== Error correction and assembling warnings:
+ * 0:00:57.258   164M / 2G    WARN    General                 (launcher.cpp              : 172)   Your data seems to have high uniform coverage depth. It is strongly recommended to use --isolate option.
+======= Warnings saved to /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/warnings.log

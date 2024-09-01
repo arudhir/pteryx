@@ -1,0 +1,6 @@
+- "left reads":
+  - "/home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/mesoplasma_simulated.1.paired.fq.gz"
+  "orientation": "fr"
+  "right reads":
+  - "/home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/mesoplasma_simulated.2.paired.fq.gz"
+  "type": "paired-end"

@@ -1,0 +1,3 @@
+- "single reads":
+  - "/home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/mesoplasma_simulated.ont.fq.gz"
+  "type": "nanopore"

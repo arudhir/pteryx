@@ -1,0 +1,14 @@
+{
+   "name": "SYN7007",
+   "ilmn": [
+      33593772,
+      33593773,
+      33593774
+   ],
+   "ont": [
+      34108377
+   ],
+   "outdir": "outputs",
+   "size": "5M",
+   "canu_correct": false
+}

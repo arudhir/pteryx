@@ -1,0 +1,62 @@
+ç---
+max read length: 151
+nomerge max read length: 151
+average read length: 151
+average coverage: 121.838
+libraries:       
+    - type:            paired-end
+      orientation:     fr
+      left reads:      
+        - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/mesoplasma_simulated.1.paired.fq.00.0_0.cor.fastq.gz
+      right reads:     
+        - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/mesoplasma_simulated.2.paired.fq.00.0_0.cor.fastq.gz
+      single reads:    
+        - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/mesoplasma_simulated._unpaired.00.0_0.cor.fastq.gz
+      data:            
+        unmerged read length: 151
+        merged read length: 0
+        insert size mean: 0
+        insert size deviation: 0
+        insert size left quantile: 0
+        insert size right quantile: 0
+        insert size median: 0
+        insert size mad: 0
+        insert size distribution: {  }
+        pi threshold:    0
+        binary reads info: 
+          binary converted: true
+          bin reads info file: /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/.bin_reads/INFO_0
+          paired read prefix: /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/.bin_reads/paired_0
+          merged read prefix: /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/.bin_reads/merged_0
+          single read prefix: /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/.bin_reads/single_0
+          chunk num:       16
+        single reads mapped: false
+        library index:   0
+        number of reads: 1000000
+        total nucleotides: 150999681
+    - type:            nanopore
+      single reads:    
+        - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/mesoplasma_simulated.ont.fq.gz
+      data:            
+        unmerged read length: 124358
+        merged read length: 0
+        insert size mean: 0
+        insert size deviation: 0
+        insert size left quantile: 0
+        insert size right quantile: 0
+        insert size median: 0
+        insert size mad: 0
+        insert size distribution: {  }
+        pi threshold:    0
+        binary reads info: 
+          binary converted: true
+          bin reads info file: /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/.bin_reads/INFO_1
+          paired read prefix: /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/.bin_reads/paired_1
+          merged read prefix: /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/.bin_reads/merged_1
+          single read prefix: /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/.bin_reads/single_1
+          chunk num:       16
+        single reads mapped: false
+        library index:   1
+        number of reads: 2699
+        total nucleotides: 39674855
+...

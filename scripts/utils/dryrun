@@ -1,0 +1,12 @@
+#!/bin/bash
+snakemake -s Snakefile \
+    --config name=SYN7260 \
+             nanopore=input/SYN7260.ont.fq.gz \
+             illumina=["input/SYN7260.1.fq.gz","input/SYN7260.2.fq.gz"] \
+             size=5M \
+             lineage=bacteria \
+             porefilt_correct=False \
+             canu_correct=True \
+             polish_iterations=1 \
+             outdir=/usr/src/pteryx/output \
+    --dry-run

@@ -1,0 +1,137 @@
+- STAGE: Read error correction
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: ec_start
+- STAGE: Read error correction
+  args:
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/configs/config.info
+  config_dir: corrected
+  del_after:
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/tmp/hammer_rNpKTD
+  output_files:
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/corrected.yaml
+  path: /opt/SPAdes-3.14.0-Linux/bin/spades-hammer
+  short_name: ec_runtool
+- STAGE: corrected reads compression
+  args:
+  - /opt/SPAdes-3.14.0-Linux/share/spades/spades_pipeline/scripts/compress_all.py
+  - --input_file
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/corrected.yaml
+  - --ext_python_modules_home
+  - /opt/SPAdes-3.14.0-Linux/share/spades
+  - --max_threads
+  - '16'
+  - --output_dir
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected
+  - --not_used_yaml_file
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/dont_correct.yaml
+  - --gzip_output
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: /usr/bin/python
+  short_name: ec_compress
+- STAGE: Read error correction
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: ec_finish
+- STAGE: Assembling
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: as_start
+- STAGE: K21
+  args:
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K21/configs/config.info
+  config_dir: K21
+  del_after: []
+  output_files: []
+  path: /opt/SPAdes-3.14.0-Linux/bin/spades-core
+  short_name: k21
+- STAGE: K33
+  args:
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K33/configs/config.info
+  config_dir: K33
+  del_after: []
+  output_files: []
+  path: /opt/SPAdes-3.14.0-Linux/bin/spades-core
+  short_name: k33
+- STAGE: K55
+  args:
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K55/configs/config.info
+  config_dir: K55
+  del_after: []
+  output_files: []
+  path: /opt/SPAdes-3.14.0-Linux/bin/spades-core
+  short_name: k55
+- STAGE: K77
+  args:
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K77/configs/config.info
+  config_dir: K77
+  del_after: []
+  output_files: []
+  path: /opt/SPAdes-3.14.0-Linux/bin/spades-core
+  short_name: k77
+- STAGE: Copy files
+  args:
+  - /opt/SPAdes-3.14.0-Linux/share/spades/spades_pipeline/scripts/copy_files.py
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K77/before_rr.fasta
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/before_rr.fasta
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K77/final_contigs.fasta
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/contigs.fasta
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K77/first_pe_contigs.fasta
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/first_pe_contigs.fasta
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K77/scaffolds.fasta
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/scaffolds.fasta
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K77/scaffolds.paths
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/scaffolds.paths
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K77/assembly_graph_with_scaffolds.gfa
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/assembly_graph_with_scaffolds.gfa
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K77/assembly_graph.fastg
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/assembly_graph.fastg
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/K77/final_contigs.paths
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/contigs.paths
+  config_dir: ''
+  del_after:
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/.bin_reads
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/tmp/spades_WhtCXM
+  output_files: []
+  path: /usr/bin/python
+  short_name: copy_files
+- STAGE: Assembling
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: as_finish
+- STAGE: Breaking scaffolds
+  args:
+  - /opt/SPAdes-3.14.0-Linux/share/spades/spades_pipeline/scripts/breaking_scaffolds_script.py
+  - --result_scaffolds_filename
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/scaffolds.fasta
+  - --misc_dir
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/misc
+  - --threshold_for_breaking_scaffolds
+  - '3'
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: /usr/bin/python
+  short_name: bs
+- STAGE: Terminate
+  args: []
+  config_dir: ''
+  del_after:
+  - /home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/configs
+  output_files: []
+  path: 'true'
+  short_name: terminate

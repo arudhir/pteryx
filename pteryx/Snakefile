@@ -1,0 +1,212 @@
+import sys
+from utils import value_to_float, get_insert_size
+from ginkgo_common.utils import upload_s3_asset
+
+# import logging
+# _logger = logging.getLogger()
+# _logger.setLevel(30)
+
+
+outdir = config['outdir']
+
+# These have to be below the imports because otherwise Snakemake will try and
+# evaluate the inputs/outputs before the imports, causing a NameError
+
+# Determine what assemblies we should do based on the input reads
+targets = set()
+if config.get('ilmn'):
+    include: 'rules/read_processing/illumina.smk'
+    include: 'rules/assembly/spades.smk'
+    include: 'rules/assembly/skesa.smk'
+    targets.add(rules.process_illumina.output)
+    targets.add(rules.skesa.output)
+    targets.add(rules.spades.output)
+    targets.add(rules.metaspades.output)
+    # targets.add(rules.biosyntheticspades.output)
+if config.get('ont'):
+    include: 'rules/read_processing/nanopore.smk'
+    include: 'rules/assembly/shasta.smk'
+    include: 'rules/assembly/canu.smk'
+    include: 'rules/assembly/flye.smk'
+    include: 'rules/assembly/miniasm.smk'
+    # targets.add(rules.processed_nanoplot.output)
+    targets.add(rules.canu.output)
+    targets.add(rules.flye.output)
+    targets.add(rules.miniasm.output)
+if config.get('ilmn') and config.get('ont'):
+    include: 'rules/assembly/unicycler.smk'
+    include: 'rules/assembly/hybridspades.smk'
+    targets.add(rules.hybridspades.output)
+    targets.add(rules.unicycler.output)
+    targets.add(rules.hybridspades.output)
+
+rule all:
+    input:
+        targets
+
+
+
+
+
+
+
+
+
+#        expand(targets, outdir=config['outdir'], sample=config['ilmn'])
+#        datastore_ilmn = expand(
+#            rules.concat_ilmn.output.r1,
+#            outdir=[config['outdir']],
+#            sample=config['ilmn']
+#        ),
+#        
+#        repaired_reads = expand(
+#            rules.repair.output.r1,
+#            outdir=[config['outdir']],
+#        ),
+#
+#        normalized_reads = expand(
+#            rules.normalize.output.r1,
+#            outdir=[config['outdir']],
+#        ),
+#
+#        fastqc = expand(
+#            rules.fastqc.output.r1_fastqc,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        multiqc = rules.multiqc.output.multiqc_txt,
+#
+#        processed_ilmn = rules.process_illumina.output.r1,
+#
+#        datastore_ont = expand(
+#            rules.download_nanopore.output.ont,
+#            outdir=[config['outdir']],
+#            sample=config['ont']
+#        ),
+#        
+#        porechop = expand(
+#            rules.porechop.output,
+#            outdir=[config['outdir']],
+#        ),
+#
+#        kat = expand(
+#            rules.kat.output,
+#            outdir=[config['outdir']],
+#        ),
+#        
+#        filtlong = expand(
+#            rules.filtlong.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        processed_nanoplot = expand(
+#            rules.processed_nanoplot.output,
+#            outdir=[config['outdir']]
+#        ),
+#        
+#        shasta = expand(
+#            rules.shasta.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#
+#        hybridspades = expand(
+#            rules.hybridspades.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        metaspades = expand(
+#            rules.metaspades.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        biosyntheticspades = expand(
+#            rules.biosyntheticspades.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        miniasm = expand(
+#            rules.miniasm.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        skesa = expand(
+#            rules.skesa.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        flye = expand(
+#            rules.flye.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        canu = expand(
+#            rules.canu.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        unicycler = expand(
+#            rules.unicycler.output,
+#            outdir=[config['outdir']]
+#        ),
+#
+#        assemblies = rules.gather_assemblies.output,
+#        quast = rules.quast.output.report,
+        ###############################################################################
+        ############################# Read Pre-processing #############################
+        ###############################################################################
+        #multiqc = rules.multiqc.output.multiqc_txt,
+        #nanoplot = rules.nanoplot.output,
+
+        ###############################################################################
+        ################################# Assemblies ##################################
+        ###############################################################################
+        #polished_assemblies = rules.pilon.output.polished_assembly,
+        #polished_assemblies = expand(
+            #rules.pilon.output.polished_assembly,
+            #assembler=glob_wildcards(
+                #f'{outdir}/assemblies/gathered_assemblies/{config["name"]}_{{assembler}}.fa'
+            #).assembler
+        #),
+        
+        ###############################################################################
+        ################################## Assembly QC ################################
+        ###############################################################################
+        #quast = rules.quast.output.report,
+        #busco = expand(
+            #rules.busco.output.outdir,
+            #assembler=glob_wildcards(
+              #f'{outdir}/assemblies/'
+              #f'gathered_assemblies/{config["name"]}_{{assembler}}.fa'
+            #).assembler
+        #),
+
+        ################################################################################
+        ################################### Annotate ###################################
+        ################################################################################
+        #gff = expand(
+            #rules.prokka.output.gff,
+            #assembler=glob_wildcards(
+                #f'{outdir}/assemblies/'
+                #f'gathered_assemblies/{config["name"]}_{{assembler}}.fa'
+              #).assembler
+        #),
+
+        ###############################################################################
+        ################################# Comparative #################################
+        ###############################################################################
+        #minigraph = expand(
+        #    rules.minigraph.output,
+        #    assembler=glob_wildcards(
+        #        f'{outdir}/assemblies/'
+        #        f'gathered_assemblies/{config["name"]}_{{assembler}}.fa'
+        #      ).assembler
+        #),
+
+        #progressiveMauve = expand(
+        #    rules.progressiveMauve.output.xmfa,
+        #    assembler=glob_wildcards(
+        #        f'{outdir}/assemblies/'
+        #        f'gathered_assemblies/{config["name"]}_{{assembler}}.fa'
+        #      ).assembler
+        #),

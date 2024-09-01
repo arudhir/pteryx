@@ -1,0 +1,32 @@
+pteryx.log
+pteryx/output/
+pytest.html
+workflow/.snakemake/*
+*.pyc
+input/*
+inputs/*
+outputs/*
+output/*
+test/*
+workflow/outputs/*
+*.bam
+*.swp
+.download_ngs_files.log
+.idea/*
+.aws/*
+.snakemake/*
+
+#DEFAULTS:
+
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+#dev
+dev/*
+batch*

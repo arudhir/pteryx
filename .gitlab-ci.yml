@@ -1,0 +1,219 @@
+stages:
+  - build
+  - test
+  - deploy
+  - bump
+  - release
+
+variables:
+  BAAS_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH:baas-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+  BUILD_IMAGE: 037405968974.dkr.ecr.us-east-1.amazonaws.com/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+  IMAGE: 037405968974.dkr.ecr.us-east-1.amazonaws.com/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+  GINKGO_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  LATEST_IMAGE: $CI_REGISTRY_IMAGE:latest
+
+.login-defaults: &login-defaults
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - $(aws ecr get-login --no-include-email --region us-east-1)
+
+build:
+  <<: *login-defaults
+  stage: build
+  image: docker.ginkgobioworks.com/docker/gitlab-worker:v3.5.1
+  tags:
+    - aws-runner-default
+  variables:
+    DOCKER_BUILDKIT: 1
+  script:
+    - aws ecr create-repository --region us-east-1 --repository-name ${CI_PROJECT_PATH} || true
+    # - docker pull $BUILD_IMAGE || true
+    - >
+      docker build 
+      --cache-from $GINKGO_IMAGE
+      --build-arg BUILDKIT_INLINE_CACHE=1
+      --tag $BUILD_IMAGE .
+    - docker push $BUILD_IMAGE
+    - docker tag $BUILD_IMAGE $GINKGO_IMAGE
+    - docker push $GINKGO_IMAGE
+
+test:
+  image:
+    name: $GINKGO_IMAGE
+    #entrypoint: [""]
+    stage: test
+    script:
+      - pytest -v
+
+test-all:on-schedule:
+  image: $BUILD_IMAGE
+  only:
+    - schedules
+  script:
+    - pytest -v
+
+test-all:
+  image: $BUILD_IMAGE
+  stage:  test
+  when: manual
+  script:
+    - pytest -v --runslow
+
+release-latest-image:
+  stage: release
+  image: docker.ginkgobioworks.com/docker/gitlab-worker:v3.5.1
+  tags:
+    - aws-runner
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $BUILD_IMAGE
+    - docker tag $BUILD_IMAGE $LATEST_IMAGE
+    - docker push $LATEST_IMAGE
+  when: manual
+
+release-package:
+  stage: release
+  image: docker.ginkgobioworks.com/docker/gitlab-worker:v4.0.0
+  tags:
+    - aws-runner
+  script:
+    - python3 -m build
+    - twine upload dist/*
+  only:
+    - tags
+
+include:
+  - project: "software/aws-infra"
+    ref: master
+    file: ".gitlab-ci.template.yml"
+
+update-job-definition:
+  extends: .trigger-job-definition
+  stage: deploy
+  when: always
+  variables:
+    AWS_ACCOUNT_NUMBER: 803444171345
+    NAME: bbypteryx
+
+ngs-baas:
+  extends: .trigger-batch-as-a-service
+  stage: deploy
+  variables:
+    AWS_ACCOUNT_NUMBER: 803444171345
+
+ngs-batch-env:
+  extends: .trigger-batch-environment
+  stage: deploy
+  variables:
+    AWS_ACCOUNT_NUMBER: 803444171345
+    NAME: batch
+
+stages:
+  - build
+  - test
+  - deploy
+  - bump
+  - release
+
+variables:
+  BAAS_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH:baas-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+  BUILD_IMAGE: 037405968974.dkr.ecr.us-east-1.amazonaws.com/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+  IMAGE: 037405968974.dkr.ecr.us-east-1.amazonaws.com/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+  GINKGO_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  LATEST_IMAGE: $CI_REGISTRY_IMAGE:latest
+
+.login-defaults: &login-defaults
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - $(aws ecr get-login --no-include-email --region us-east-1)
+
+build:
+  <<: *login-defaults
+  stage: build
+  image: docker.ginkgobioworks.com/docker/gitlab-worker:v3.5.1
+  tags:
+    - aws-runner-default
+  variables:
+    DOCKER_BUILDKIT: 1
+  script:
+    - aws ecr create-repository --region us-east-1 --repository-name ${CI_PROJECT_PATH} || true
+    # - docker pull $BUILD_IMAGE || true
+    - >
+      docker build 
+      --cache-from $GINKGO_IMAGE
+      --build-arg BUILDKIT_INLINE_CACHE=1
+      --tag $BUILD_IMAGE .
+    - docker push $BUILD_IMAGE
+    - docker tag $BUILD_IMAGE $GINKGO_IMAGE
+    - docker push $GINKGO_IMAGE
+
+test:
+    image:
+        name: $BUILD_IMAGE
+        entrypoint: [""]
+    stage: test
+    script:
+      - pytest -v
+
+test-all:on-schedule:
+  image: $BUILD_IMAGE
+  only:
+    - schedules
+  script:
+    - pytest -v
+
+test-all:
+  image: $BUILD_IMAGE
+  stage:  test
+  when: manual
+  script:
+    - pytest -v --runslow
+
+release-latest-image:
+  stage: release
+  image: docker.ginkgobioworks.com/docker/gitlab-worker:v3.5.1
+  tags:
+    - aws-runner
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $BUILD_IMAGE
+    - docker tag $BUILD_IMAGE $LATEST_IMAGE
+    - docker push $LATEST_IMAGE
+  when: manual
+
+release-package:
+  stage: release
+  image: docker.ginkgobioworks.com/docker/gitlab-worker:v4.0.0
+  tags:
+    - aws-runner
+  script:
+    - python3 -m build
+    - twine upload dist/*
+  only:
+    - tags
+
+include:
+  - project: "software/aws-infra"
+    ref: master
+    file: ".gitlab-ci.template.yml"
+
+update-job-definition:
+  extends: .trigger-job-definition
+  stage: deploy
+  when: always
+  variables:
+    AWS_ACCOUNT_NUMBER: 803444171345
+    NAME: bbypteryx
+
+ngs-baas:
+  extends: .trigger-batch-as-a-service
+  stage: deploy
+  variables:
+    AWS_ACCOUNT_NUMBER: 803444171345
+
+ngs-batch-env:
+  extends: .trigger-batch-environment
+  stage: deploy
+  variables:
+    AWS_ACCOUNT_NUMBER: 803444171345
+    NAME: batch

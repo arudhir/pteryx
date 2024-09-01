@@ -1,0 +1,5 @@
+ilmn:
+  - tests/fixtures/mesoplasma/mesoplasma_simulated.1.paired.fq.gz
+ont:
+  - tests/fixtures/mesoplasma/mesoplasma_simulated.ont.fq.gz
+outdir: 'outputs'

@@ -1,0 +1,9 @@
+.snakemake/*
+inputs/*
+input/*
+inputs/*
+output/*
+outputs/*
+workflow/outputs/*
+workflow/.snakemake/*
+pytest.html

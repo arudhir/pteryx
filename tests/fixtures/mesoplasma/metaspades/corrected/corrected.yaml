@@ -1,0 +1,11 @@
+- "left reads":
+  - "/home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/mesoplasma_simulated.1.paired.fq.00.0_0.cor.fastq.gz"
+  "orientation": "fr"
+  "right reads":
+  - "/home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/mesoplasma_simulated.2.paired.fq.00.0_0.cor.fastq.gz"
+  "single reads":
+  - "/home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/metaspades/corrected/mesoplasma_simulated._unpaired.00.0_0.cor.fastq.gz"
+  "type": "paired-end"
+- "single reads":
+  - "/home/aru/devel/bbypteryx/tests/fixtures/mesoplasma/GCF_000008305.1/mesoplasma_simulated.ont.fq.gz"
+  "type": "nanopore"
