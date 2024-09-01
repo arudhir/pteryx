@@ -1,6 +1,6 @@
 ################################################################################
 # Base
-FROM docker.ginkgobioworks.com/docker/ginkgo-base:v4.0.0
+FROM ubuntu:latest
 
 ENV TOOLS=/tools
 
