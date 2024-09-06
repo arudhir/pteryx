@@ -55,6 +55,9 @@ MAKE_EXT = docker-compose run --rm ${PROJECT_SLUG} make -C $(APP_HOME)
 
 # --- Python ---
 
+venv:
+	source venv/bin/activate
+
 dist: venv clean
 	python -m build
 

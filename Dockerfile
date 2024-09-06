@@ -72,47 +72,47 @@ RUN wget -O BBMap_37.41.tar.gz https://sourceforge.net/projects/bbmap/files/BBMa
     && gunzip BBMap_37.41.tar.gz \
     && tar -xvf BBMap_37.41.tar
 
-######################
-### Samtools et. al ##
-######################
-#RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 \
-    #&& tar xvf samtools-1.9.tar.bz2 \
-    #&& cd samtools-1.9 \
-    #&& ./configure \
-    #&& make \
-    #&& make install
-#ENV SAMTOOLS="${TOOLS}/samtools-1.9/samtools"
+#####################
+## Samtools et. al ##
+#####################
+RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 \
+    && tar xvf samtools-1.9.tar.bz2 \
+    && cd samtools-1.9 \
+    && ./configure \
+    && make \
+    && make install
+ENV SAMTOOLS="${TOOLS}/samtools-1.9/samtools"
 
-#RUN wget https://github.com/samtools/bcftools/releases/download/1.9/bcftools-1.9.tar.bz2 \
-    #&& tar xvf bcftools-1.9.tar.bz2 \
-    #&& cd bcftools-1.9 \
-    #&& ./configure \
-    #&& make \
-    #&& make install
-#ENV BCFTOOLS="${TOOLS}/bcftools-1.9/bcftools"
+RUN wget https://github.com/samtools/bcftools/releases/download/1.9/bcftools-1.9.tar.bz2 \
+    && tar xvf bcftools-1.9.tar.bz2 \
+    && cd bcftools-1.9 \
+    && ./configure \
+    && make \
+    && make install
+ENV BCFTOOLS="${TOOLS}/bcftools-1.9/bcftools"
 
-#RUN wget https://github.com/samtools/htslib/releases/download/1.9/htslib-1.9.tar.bz2 \
-    #&& tar xvf htslib-1.9.tar.bz2 \
-    #&& cd htslib-1.9 \
-    #&& ./configure \
-    #&& make \
-    #&& make install
-#ENV HTSLIB="${TOOLS}/htslib-1.9/htslib"
+RUN wget https://github.com/samtools/htslib/releases/download/1.9/htslib-1.9.tar.bz2 \
+    && tar xvf htslib-1.9.tar.bz2 \
+    && cd htslib-1.9 \
+    && ./configure \
+    && make \
+    && make install
+ENV HTSLIB="${TOOLS}/htslib-1.9/htslib"
 
 ############
 ### BLAST ##
 ############
-#RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.9.0/ncbi-blast-2.9.0+-x64-linux.tar.gz \
-    #&& tar -zxvf ncbi-blast-2.9.0+-x64-linux.tar.gz
+RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.9.0/ncbi-blast-2.9.0+-x64-linux.tar.gz \
+    && tar -zxvf ncbi-blast-2.9.0+-x64-linux.tar.gz
 
 ##############
 ### tbl2asn ##
 ##############
 ## More info here: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
-#RUN wget ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools/converters/by_program/tbl2asn/linux64.tbl2asn.gz \
-    #&& gunzip linux64.tbl2asn.gz \
-    #&& mv linux64.tbl2asn tbl2asn \
-    #&& chmod a+x tbl2asn
+RUN wget ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools/converters/by_program/tbl2asn/linux64.tbl2asn.gz \
+    && gunzip linux64.tbl2asn.gz \
+    && mv linux64.tbl2asn tbl2asn \
+    && chmod a+x tbl2asn
 
 ##############
 ### QUAST ####
@@ -123,8 +123,8 @@ RUN wget -O BBMap_37.41.tar.gz https://sourceforge.net/projects/bbmap/files/BBMa
 ##############
 ### Prokka ###
 ##############
-#RUN wget -O prokka-v1.14.tar.gz https://github.com/tseemann/prokka/archive/v1.14.0.tar.gz \
-    #&& tar -xzvf prokka-v1.14.tar.gz
+RUN wget -O prokka-v1.14.tar.gz https://github.com/tseemann/prokka/archive/v1.14.0.tar.gz \
+    && tar -xzvf prokka-v1.14.tar.gz
 
 ##############
 #### Canu ####
@@ -180,8 +180,8 @@ RUN wget -O BBMap_37.41.tar.gz https://sourceforge.net/projects/bbmap/files/BBMa
 ##################
 ##### Bowtie2 ####
 ##################
-#RUN wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.2/bowtie2-2.3.2-linux-x86_64.zip \
-    #&& unzip bowtie2-2.3.2-linux-x86_64.zip
+RUN wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.2/bowtie2-2.3.2-linux-x86_64.zip \
+    && unzip bowtie2-2.3.2-linux-x86_64.zip
 
 ##################
 ##### Porechop ###
@@ -402,24 +402,24 @@ RUN wget -O BBMap_37.41.tar.gz https://sourceforge.net/projects/bbmap/files/BBMa
 #RUN prokka-1.14.0/bin/prokka --setupdb
 
 ### Set PATH and do some extraneous steps
-#ENV PATH=/:/usr/src/pteryx/pteryx:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.9.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-3.10.1-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:$PATH
+ENV PATH=/:/usr/src/pteryx/pteryx:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.9.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-3.10.1-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:$PATH
 
 #RUN rm ${TOOLS}/*.gz && \
     #rm ${TOOLS}/*.zip
 
 #################################################################################
-## Workflow and homemade scripts
-#RUN mkdir /usr/src/pteryx -p
-#WORKDIR /usr/src/pteryx
-#COPY setup.py setup.py
-#COPY pteryx pteryx
-##RUN python3 setup.py install
-#COPY setup.cfg setup.cfg
-#RUN pip3 install build && python3 -m build && pip3 install .
-#ENV PYTHONPATH=${PYTHONPATH}:/usr/src/pteryx
-##RUN python3 setup.py bdist && pip3 install -e .
+# Workflow and homemade scripts
+RUN mkdir /usr/src/pteryx -p
+WORKDIR /usr/src/pteryx
+COPY setup.py setup.py
+COPY pteryx pteryx
+#RUN python3 setup.py install
+COPY setup.cfg setup.cfg
+RUN pip3 install build && python3 -m build && pip3 install .
+ENV PYTHONPATH=${PYTHONPATH}:/usr/src/pteryx
+#RUN python3 setup.py bdist && pip3 install -e .
 
-#ENV APP_HOME=/pteryx
-#RUN mkdir $APP_HOME -p
-#workdir $app_home
-#run mkdir -p $app_home/inputs $app_home/outputs
+ENV APP_HOME=/pteryx
+RUN mkdir $APP_HOME -p
+workdir $app_home
+run mkdir -p $app_home/inputs $app_home/outputs

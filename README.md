@@ -8,6 +8,11 @@
 
 # Quick Start
 
+```console
+make image
+make run
+```
+
 Grab the current production release and run `pteryx`
 ```console
 ➜ docker run --rm -it docker.ginkgobioworks.com/ngs-analysis/pteryx:latest pteryx --help

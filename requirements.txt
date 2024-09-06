@@ -1,9 +1,11 @@
 awscli
+boto3
 biopython
 decorator==4.4.2
 futures
 ipdb
 multiqc
+pandas
 pygments>=2.6.0
 pysam
 pytest
