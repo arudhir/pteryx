@@ -1,10 +1,7 @@
 awscli
 biopython
 decorator==4.4.2
-download-ngs-files
 futures
-ginkgo-common
-ginkgo-log
 ipdb
 multiqc
 pygments>=2.6.0
@@ -13,7 +10,6 @@ pytest
 pytest-html
 requests
 tabulate
-scipy==1.5.4
+scipy
 setuptools
 snakemake
-urllib3<1.23>=1.21.1
