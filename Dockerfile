@@ -41,6 +41,7 @@ RUN apt-get update && apt-get install -y \
 # TODO: Move to uv Install uv
 #RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 #RUN pip install uv
+COPY --from=ghcr.io/astral-sh/uv:0.4.6 /uv /bin/uv
 
 # Set up Python virtual environment
 ENV VIRTUAL_ENV=/opt/venv
@@ -109,10 +110,11 @@ RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.9.0/ncbi-blast-2.
 ### tbl2asn ##
 ##############
 ## More info here: https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/
-RUN wget ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools/converters/by_program/tbl2asn/linux64.tbl2asn.gz \
-    && gunzip linux64.tbl2asn.gz \
-    && mv linux64.tbl2asn tbl2asn \
-    && chmod a+x tbl2asn
+# Update: tbl2asn no longer exists, replaced by table2asn: https://ftp.ncbi.nlm.nih.gov/asn1-converters/by_program/table2asn/
+RUN wget https://ftp.ncbi.nlm.nih.gov/asn1-converters/by_program/table2asn/linux64.table2asn.gz \
+    && gunzip linux64.table2asn.gz \
+    && mv linux64.table2asn table2asn \
+    && chmod a+x table2asn
 
 ##############
 ### QUAST ####
@@ -415,6 +417,7 @@ COPY setup.py setup.py
 COPY pteryx pteryx
 #RUN python3 setup.py install
 COPY setup.cfg setup.cfg
+RUN source venv
 RUN pip3 install build && python3 -m build && pip3 install .
 ENV PYTHONPATH=${PYTHONPATH}:/usr/src/pteryx
 #RUN python3 setup.py bdist && pip3 install -e .

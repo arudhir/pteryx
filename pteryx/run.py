@@ -10,10 +10,10 @@ from pathlib import Path
 import subprocess
 import requests
 from requests import HTTPError
-from snakemake import snakemake
-from ginkgo_common.utils import Retry, call_executable, upload_s3_asset, upload_batch_results, download_s3_asset, datastore
-from ginkgo_common.logger import logger
-from ginkgo_common.constants import GRAPHQL_DEFAULT_USERNAME, GRAPHQL_URL
+# from snakemake import snakemake
+# from ginkgo_common.utils import Retry, call_executable, upload_s3_asset, upload_batch_results, download_s3_asset, datastore
+# from ginkgo_common.logger import logger
+# from ginkgo_common.constants import GRAPHQL_DEFAULT_USERNAME, GRAPHQL_URL
 
 import shutil 
 import pteryx 
