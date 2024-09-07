@@ -2,7 +2,6 @@ import pytest
 import conftest
 from conftest import *
 import multiprocessing
-from ginkgo_common.utils import setup_batch_env, run_executable
 
 def test_snakemake_dryrun(SNAKEFILE, CONFIGFILE):
     resp = run_executable(

@@ -2,7 +2,6 @@ import pathlib
 import pytest
 import conftest
 from conftest import *
-from ginkgo_common.utils import setup_batch_env, run_executable
 
 FIXTURE_DIR = conftest.FIXTURE_DIR
 

@@ -137,10 +137,10 @@ RUN wget -O prokka-v1.14.tar.gz https://github.com/tseemann/prokka/archive/v1.14
 ##############
 #### Flye ####
 ##############
-#RUN git clone https://github.com/fenderglass/Flye \
-    #&& cd Flye \
-    #&& python3 setup.py build \
-    #&& python3 setup.py install --user
+RUN git clone https://github.com/fenderglass/Flye \
+    && cd Flye \
+    && python3 setup.py build \
+    && python3 setup.py install
 
 #################
 #### Filtlong ###
@@ -253,16 +253,16 @@ RUN wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.2/bowtie2
 ##################
 #### minigraph ###
 ##################
-#RUN git clone https://github.com/lh3/minigraph \
-    #&& cd minigraph && make
+RUN git clone https://github.com/lh3/minigraph \
+    && cd minigraph && make
 
 ##################
 ##### Miniasm ####
 ##################
-#WORKDIR $TOOLS
-#RUN git clone https://github.com/lh3/miniasm  \
-    #&& cd miniasm  \
-    #&& make
+WORKDIR $TOOLS
+RUN git clone https://github.com/lh3/miniasm  \
+    && cd miniasm  \
+    && make
 
 ##################
 ##### MUMmer #####
@@ -283,10 +283,10 @@ RUN wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.2/bowtie2
 ################
 #### SKESA #####
 ################
-#WORKDIR ${TOOLS}
-#RUN git clone https://github.com/ncbi/SKESA \
-    #&& cd SKESA \
-    #&& make -f Makefile.nongs
+WORKDIR ${TOOLS}
+RUN git clone https://github.com/ncbi/SKESA \
+    && cd SKESA \
+    && make -f Makefile.nongs
 
 ################
 #### DIAMOND ###
@@ -312,17 +312,17 @@ RUN wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.2/bowtie2
 ##################
 ###### fastp #####
 ##################
-#RUN wget http://opengene.org/fastp/fastp \
-    #&& chmod a+x ./fastp
+RUN wget http://opengene.org/fastp/fastp \
+    && chmod a+x ./fastp
 
 ###################
 ###### SPAdes #####
 ###################
-#WORKDIR ${TOOLS}
-#RUN wget https://github.com/ablab/spades/releases/download/v3.13.0/SPAdes-3.13.0-Linux.tar.gz \
-    #&& tar -xvzf "${TOOLS}/SPAdes-3.13.0-Linux.tar.gz" \
-    #&& rm "${TOOLS}/SPAdes-3.13.0-Linux.tar.gz" 
-    ##&& cp "{TOOLS}/SPAdes-3.14-Linux.tar.gz" 
+WORKDIR ${TOOLS}
+RUN wget https://github.com/ablab/spades/releases/download/v3.13.0/SPAdes-3.13.0-Linux.tar.gz \
+    && tar -xvzf "${TOOLS}/SPAdes-3.13.0-Linux.tar.gz" \
+    && rm "${TOOLS}/SPAdes-3.13.0-Linux.tar.gz" 
+    #&& cp "{TOOLS}/SPAdes-3.14-Linux.tar.gz" 
 
 ###################
 ###### pauvre #####
@@ -412,8 +412,9 @@ ENV PATH=/:/usr/src/pteryx/pteryx:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/
 #################################################################################
 # Workflow and homemade scripts
 # Set up the working directory
-RUN mkdir -p /usr/src/pteryx
-WORKDIR /usr/src/pteryx
+ENV APP_HOME=/usr/src/pteryx
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
 
 # Copy necessary files
 COPY setup.py setup.py
@@ -440,9 +441,9 @@ ENV PYTHONPATH=${PYTHONPATH}:/usr/src/pteryx
 
 
 # Set up application home
-ENV APP_HOME=/pteryx
-RUN mkdir -p $APP_HOME
-WORKDIR $APP_HOME
+#ENV APP_HOME=/pteryx
+#RUN mkdir -p $APP_HOME
+#WORKDIR $APP_HOME
 
 # Create input and output directories
 RUN mkdir -p $APP_HOME/inputs $APP_HOME/outputs
