@@ -35,7 +35,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import sys
 
-def setup_logger(log_file='app.log'):
+def setup_logger(log_file='outputs/pteryx.log'):
     # Create a logger
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)

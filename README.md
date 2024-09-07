@@ -8,9 +8,25 @@
 
 # Quick Start
 
+Currently a WIP.
 ```console
-make image
-make run
+$ make image
+$ docker-compose run --rm pteryx pteryx --ilmn tests/fixtures/mesoplasma/mesoplasma_simulated.1.paired.fq.gz
+
+Job stats:
+job                   count
+------------------  -------
+all                       1
+biosyntheticspades        1
+concat_ilmn               1
+dedupe                    1
+fastp                     1
+normalize                 1
+process_illumina          1
+repair                    1
+skesa                     1
+spades                    1
+total                    10
 ```
 
 Grab the current production release and run `pteryx`
