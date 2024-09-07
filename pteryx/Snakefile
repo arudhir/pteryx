@@ -1,6 +1,6 @@
 import sys
 from utils import value_to_float, get_insert_size
-from ginkgo_common.utils import upload_s3_asset
+#from ginkgo_common.utils import upload_s3_asset
 
 # import logging
 # _logger = logging.getLogger()
@@ -16,12 +16,12 @@ outdir = config['outdir']
 targets = set()
 if config.get('ilmn'):
     include: 'rules/read_processing/illumina.smk'
-    include: 'rules/assembly/spades.smk'
+    #include: 'rules/assembly/spades.smk'
     include: 'rules/assembly/skesa.smk'
     targets.add(rules.process_illumina.output)
     targets.add(rules.skesa.output)
-    targets.add(rules.spades.output)
-    targets.add(rules.metaspades.output)
+    #targets.add(rules.spades.output)
+    #targets.add(rules.metaspades.output)
     # targets.add(rules.biosyntheticspades.output)
 if config.get('ont'):
     include: 'rules/read_processing/nanopore.smk'

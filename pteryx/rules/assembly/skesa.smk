@@ -1,5 +1,4 @@
 import pathlib
-from ginkgo_common.utils import run_executable
 
 SKESA_OUTDIR = pathlib.Path(config['outdir']) / 'assemblies/skesa'
 rule skesa:

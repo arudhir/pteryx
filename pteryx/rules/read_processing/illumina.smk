@@ -1,7 +1,6 @@
 import json
 from glob import glob
 import pathlib
-from ginkgo_common.utils import run_executable
 import os
 
 ILMN_READ_DIR = Path(config['outdir']) / 'illumina'

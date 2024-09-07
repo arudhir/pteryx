@@ -2,6 +2,31 @@ import pytest
 import conftest
 from conftest import *
 import multiprocessing
+import subprocess
+import multiprocessing
+import shlex
+
+def run_executable(executable, parameters):
+    # prepare the command string from executable and parameters
+    cmd = [executable]
+    
+    # flattening parameters into a list of strings
+    for key, value in parameters.items():
+        cmd.append(f'--{key}')
+        cmd.append(str(value))
+
+    # execute the command and capture output
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        return {
+            'success': True,
+            'output': result.stdout
+        }
+    except subprocess.CalledProcessError as e:
+        return {
+            'success': False,
+            'output': e.stderr
+        }
 
 # @pytest.mark.slow
 def test_shasta():

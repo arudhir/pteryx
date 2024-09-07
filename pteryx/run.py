@@ -10,6 +10,16 @@ from pathlib import Path
 import subprocess
 import requests
 from requests import HTTPError
+from snakemake.api import SnakemakeApi
+from snakemake.settings.types import (
+        OutputSettings,
+        WorkflowSettings, 
+        ExecutionSettings,
+        ResourceSettings,
+        ConfigSettings,
+        DAGSettings
+    )
+
 # from snakemake import snakemake
 # from ginkgo_common.utils import Retry, call_executable, upload_s3_asset, upload_batch_results, download_s3_asset, datastore
 # from ginkgo_common.logger import logger
@@ -20,6 +30,36 @@ import pteryx
 from .cli import parse_arguments
 from .utils import tsv2json, json2tsv
 from .errors import CommandError, ExistingResultError
+
+import logging
+from logging.handlers import RotatingFileHandler
+import sys
+
+def setup_logger(log_file='app.log'):
+    # Create a logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    # Create handlers
+    c_handler = logging.StreamHandler(sys.stdout)
+    f_handler = RotatingFileHandler(log_file, maxBytes=10*1024*1024, backupCount=5)
+    c_handler.setLevel(logging.INFO)
+    f_handler.setLevel(logging.INFO)
+
+    # Create formatters and add it to handlers
+    log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    c_format = logging.Formatter(log_format)
+    f_format = logging.Formatter(log_format)
+    c_handler.setFormatter(c_format)
+    f_handler.setFormatter(f_format)
+
+    # Add handlers to the logger
+    logger.addHandler(c_handler)
+    logger.addHandler(f_handler)
+
+    return logger
+
+logger = setup_logger()
 
 ASSEMBLERS = [
     'skesa', 'canu', 'flye', 
@@ -342,19 +382,57 @@ def validate_args(args):
     pass
 
 def run_workflow(args):
-    args = parse_arguments()
-    snakemake(
-        snakefile=Path(pteryx.__path__[0]) / 'Snakefile',
-        targets=args.targets,
-        config={
-            'ilmn': args.ilmn,
-            'ont': args.ont,
-            'outdir': args.outdir,
-            'canu_correct': args.canu_correct,
-            'size': args.size,
-        },
-        cores=args.threads,
-        dryrun=args.dry_run,
-        printshellcmds=True,
-        keepgoing=True
-    )
+    with SnakemakeApi(
+        OutputSettings(
+            verbose=False,
+            printshellcmds=True
+        )
+    ) as api:
+        try:
+            workflow = api.workflow(
+                snakefile=Path(pteryx.__path__[0]) / 'Snakefile',
+                workflow_settings=WorkflowSettings(),
+                resource_settings=ResourceSettings(
+                    cores=args.threads
+                ),
+                config_settings=ConfigSettings(
+                    config={
+                        'ilmn': args.ilmn,
+                        'ont': args.ont,
+                        'outdir': str(args.outdir),
+                        'canu_correct': args.canu_correct,
+                        'size': args.size,
+                    }
+                )
+            )
+            dag = workflow.dag(
+                dag_settings=DAGSettings(
+                    targets=args.targets,
+                )
+            )
+            dag.execute_workflow(
+                execution_settings=ExecutionSettings(
+                    keep_going=True
+                )
+            )
+            return True
+        except Exception as e:
+            api.print_exception(e)
+            return False
+
+
+    # snakemake(
+        # snakefile=Path(pteryx.__path__[0]) / 'Snakefile',
+        # targets=args.targets,
+        # config={
+            # 'ilmn': args.ilmn,
+            # 'ont': args.ont,
+            # 'outdir': args.outdir,
+            # 'canu_correct': args.canu_correct,
+            # 'size': args.size,
+        # },
+        # cores=args.threads,
+        # dryrun=args.dry_run,
+        # printshellcmds=True,
+        # keepgoing=True
+    # )
