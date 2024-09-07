@@ -14,7 +14,7 @@ setup(
     packages=["pteryx"],
     install_requires=["snakemake", "biopython", "build"],
     dependency_links=["http://pypi.ginkgobioworks.com/simple"],
-    entry_points={"console_scripts": ["pteryx = pteryx.run:entrypoint"]},
+    entry_points={"console_scripts": ["pteryx = pteryx.run:main"]},
     include_package_data=True,
     zip_safe=True,
     python_requires=">=3.6",
