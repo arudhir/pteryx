@@ -3,7 +3,8 @@ import pathlib
 import argparse
 import multiprocessing
 from functools import partial
-from snakemake import snakemake
+import snakemake
+# from snakemake import snakemake
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

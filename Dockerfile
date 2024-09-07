@@ -1,7 +1,7 @@
 ################################################################################
 # Base
 # Base
-FROM ubuntu:latest
+FROM phusion/baseimage:noble-1.0.0
 ENV TOOLS=/tools
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -40,8 +40,8 @@ RUN apt-get update && apt-get install -y \
 
 # TODO: Move to uv Install uv
 #RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-#RUN pip install uv
-COPY --from=ghcr.io/astral-sh/uv:0.4.6 /uv /bin/uv
+RUN pip install uv --break-system-packages
+#COPY --from=ghcr.io/astral-sh/uv:0.4.6 /uv /bin/uv
 
 # Set up Python virtual environment
 ENV VIRTUAL_ENV=/opt/venv
@@ -411,18 +411,39 @@ ENV PATH=/:/usr/src/pteryx/pteryx:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/
 
 #################################################################################
 # Workflow and homemade scripts
-RUN mkdir /usr/src/pteryx -p
+# Set up the working directory
+RUN mkdir -p /usr/src/pteryx
 WORKDIR /usr/src/pteryx
+
+# Copy necessary files
 COPY setup.py setup.py
 COPY pteryx pteryx
-#RUN python3 setup.py install
 COPY setup.cfg setup.cfg
-RUN source venv
-RUN pip3 install build && python3 -m build && pip3 install .
-ENV PYTHONPATH=${PYTHONPATH}:/usr/src/pteryx
-#RUN python3 setup.py bdist && pip3 install -e .
 
+# Install build tool using pip (not uv) to ensure it's in the system Python path
+RUN pip install build --break-system-packages
+
+# Install build tool
+RUN uv pip install build
+
+# Ensure uv-installed binaries are in PATH
+ENV PATH="/root/.local/bin:${PATH}"
+
+# Build the package
+RUN python3 -m build
+
+# Install the built package
+RUN uv pip install dist/*.whl
+
+# Set Python path
+ENV PYTHONPATH=${PYTHONPATH}:/usr/src/pteryx
+
+
+# Set up application home
 ENV APP_HOME=/pteryx
-RUN mkdir $APP_HOME -p
-workdir $app_home
-run mkdir -p $app_home/inputs $app_home/outputs
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+
+# Create input and output directories
+RUN mkdir -p $APP_HOME/inputs $APP_HOME/outputs
+
