@@ -131,8 +131,8 @@ RUN wget -O prokka-v1.14.tar.gz https://github.com/tseemann/prokka/archive/v1.14
 ##############
 #### Canu ####
 ##############
-#RUN wget https://github.com/marbl/canu/releases/download/v1.8/canu-1.8.Linux-amd64.tar.xz \
-    #&& xz -dc canu-1.8.*.tar.xz | tar -xf -
+RUN wget https://github.com/marbl/canu/releases/download/v1.8/canu-1.8.Linux-amd64.tar.xz \
+    && xz -dc canu-1.8.*.tar.xz | tar -xf -
 
 ##############
 #### Flye ####
@@ -319,10 +319,10 @@ RUN wget http://opengene.org/fastp/fastp \
 ###### SPAdes #####
 ###################
 WORKDIR ${TOOLS}
-RUN wget https://github.com/ablab/spades/releases/download/v3.13.0/SPAdes-3.13.0-Linux.tar.gz \
-    && tar -xvzf "${TOOLS}/SPAdes-3.13.0-Linux.tar.gz" \
-    && rm "${TOOLS}/SPAdes-3.13.0-Linux.tar.gz" 
-    #&& cp "{TOOLS}/SPAdes-3.14-Linux.tar.gz" 
+RUN wget https://github.com/ablab/spades/releases/download/v4.0.0/SPAdes-4.0.0-Linux.tar.gz \
+    && tar -xvzf "${TOOLS}/SPAdes-4.0.0-Linux.tar.gz" \
+    && rm "${TOOLS}/SPAdes-4.0.0-Linux.tar.gz" 
+    # && cp "{TOOLS}/SPAdes-3.14-Linux.tar.gz" 
 
 ###################
 ###### pauvre #####
@@ -391,20 +391,20 @@ RUN wget https://github.com/ablab/spades/releases/download/v3.13.0/SPAdes-3.13.0
 #RUN wget https://github.com/shenwei356/csvtk/releases/download/v0.23.0/csvtk_linux_amd64.tar.gz \
     #&& tar xvf csvtk_linux_amd64.tar.gz
 
-###############
-#### Merqury ##
-###############
-#WORKDIR ${TOOLS}
-#RUN wget https://github.com/marbl/merqury/archive/v1.3.tar.gz \
-    #&& tar -zxvf v1.3.tar.gz
-#ENV MERQURY=${TOOLS}/merqury-1.3
+##############
+### Merqury ##
+##############
+WORKDIR ${TOOLS}
+RUN wget https://github.com/marbl/merqury/archive/v1.3.tar.gz \
+    && tar -zxvf v1.3.tar.gz
+ENV MERQURY=${TOOLS}/merqury-1.3
 
 
 #WORKDIR ${TOOLS}
 #RUN prokka-1.14.0/bin/prokka --setupdb
 
 ### Set PATH and do some extraneous steps
-ENV PATH=/:/usr/src/pteryx/pteryx:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.9.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-3.10.1-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:$PATH
+ENV PATH=/:/usr/src/pteryx/pteryx:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.9.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:$PATH
 
 #RUN rm ${TOOLS}/*.gz && \
     #rm ${TOOLS}/*.zip

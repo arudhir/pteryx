@@ -61,17 +61,18 @@ rule repair:
         r1 = ILMN_READ_DIR / 'repaired_reads/1.repaired.fq.gz',
         r2 = ILMN_READ_DIR / 'repaired_reads/2.repaired.fq.gz',
     run:
-        run_executable(
-            executable='repair.sh',
-            arguments=[
-                f'in1={input.r1}',
-                f'in2={input.r2}',
-                f'out1={output.r1}',
-                f'out2={output.r2}',
-                f'pigz=f',
-                f'unpigz=f',
-                '-da'
-            ]
+        # import ipdb; ipdb.set_trace()
+        shell(
+            """
+            repair.sh \
+            in1={input.r1} \
+            in2={input.r2} \
+            out1={output.r1} \
+            out2={output.r2} \
+            pigz=f \
+            unpigz=f \
+            -da
+            """
         )
 
 rule dedupe:
@@ -84,17 +85,16 @@ rule dedupe:
     resources: 
         memory = int(total_memory_gb() * 0.7)  # 70% of total RAM in GB
     run:
-        run_executable(
-            executable='clumpify.sh',
-            arguments=[
-                f'in1={input.r1}',
-                f'in2={input.r2}',
-                f'out1={output.r1}',
-                f'out2={output.r2}',
-                'dedupe',
-                'Xmx{resources.memory}g'
-                # 'optical'  # we're removing this for now since simulated reads don't have x,y position
-            ]
+        shell(
+            """
+            clumpify.sh \
+            in1={input.r1} \
+            in2={input.r2} \
+            out1={output.r1} \
+            out2={output.r2} \
+            dedupe \
+            Xmx{resources.memory}g
+            """
         )
 
 rule normalize:
@@ -108,18 +108,17 @@ rule normalize:
     resources: 
         memory = int(total_memory_gb() * 0.7)  # 70% of total RAM in GB
     run:
-        run_executable(
-            executable='bbnorm.sh',
-            arguments=[
-                f'in1={input.r1}',
-                f'in2={input.r2}',
-                f'out1={output.r1}',
-                f'out2={output.r2}',
-                f'threads={threads}',
-                'target=100',
-                'min=5',
-                '-Xmx{resources.memory}g'
-            ]
+        shell(
+            """
+            bbnorm.sh \
+            in1={input.r1} \
+            in2={input.r2} \
+            out1={output.r1} \
+            out2={output.r2} \
+            threads={threads} \
+            target=100 \
+            min=5 \
+            """
         )
 
 rule fastp:

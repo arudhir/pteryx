@@ -362,17 +362,23 @@ def get_assembly_stats(args):
     stats = []
     for asm in assembly_dir.rglob('*.fa'):
         
-        resp = call_executable(
-            'stats.sh',
-            f'in={asm} format=3'
+        resp = subprocess.run(
+            ['bash', 'stats.sh', f'in={asm}', 'format=3'], 
+            stdout=subprocess.PIPE, 
+            stderr=subprocess.PIPE,
+            text=True
         )
-        stats.append(
-            pd.read_csv(StringIO(resp['stdout']), delimiter='\t')
-              .assign(assembler=asm.stem)
-              .set_index('assembler')
-              .T
-              .to_dict()
-        )
+
+        if resp.returncode == 0:  # check if the command ran successfully
+            stats.append(
+                pd.read_csv(StringIO(resp.stdout), delimiter='\t')
+                .assign(assembler=asm.stem)
+                .set_index('assembler')
+                .T
+                .to_dict()
+            )
+        else:
+            print(f"Error running stats.sh: {resp.stderr}")
         
     with open(assembly_dir / 'assembly_stats.json', 'w+') as f:
         json.dump(stats, f)
