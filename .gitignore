@@ -31,3 +31,4 @@ ipython_config.py
 dev/*
 batch*
 venv/*
+tests/fixtures/mesoplasma/*.fq.gz
