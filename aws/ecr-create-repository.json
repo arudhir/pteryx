@@ -1,0 +1,16 @@
+{
+    "repository": {
+        "repositoryArn": "arn:aws:ecr:us-east-2:703482557814:repository/pteryx",
+        "registryId": "703482557814",
+        "repositoryName": "pteryx",
+        "repositoryUri": "703482557814.dkr.ecr.us-east-2.amazonaws.com/pteryx",
+        "createdAt": 1728069440.776,
+        "imageTagMutability": "MUTABLE",
+        "imageScanningConfiguration": {
+            "scanOnPush": false
+        },
+        "encryptionConfiguration": {
+            "encryptionType": "AES256"
+        }
+    }
+}
