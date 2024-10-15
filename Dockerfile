@@ -188,9 +188,9 @@ RUN wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.2/bowtie2
 ##################
 ##### Porechop ###
 ##################
-#RUN git clone https://github.com/rrwick/Porechop.git \
-    #&& cd Porechop \
-    #&& python3 setup.py install
+RUN git clone https://github.com/rrwick/Porechop.git \
+    && cd Porechop \
+    && python3 setup.py install
 
 ##################
 ##### Prodigal ###
