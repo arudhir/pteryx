@@ -1,6 +1,5 @@
 import subprocess
 import pathlib
-from ginkgo_common.utils import run_executable
 
 ONT_READ_DIR = pathlib.Path(config['outdir']) / 'nanopore'
 

@@ -17,27 +17,21 @@ def total_memory_gb():
 def _is_file(val):
     return Path(val).exists()
     
-# rule download_ilmn:
-#     output:
-#         r1 = ILMN_READ_DIR / 'datastore/{sample}.1.paired.fq.gz',
-#         r2 = ILMN_READ_DIR / 'datastore/{sample}.2.paired.fq.gz',
-#     params:
-#         ILMN_READ_DIR / 'datastore'
-#     run:
-#         for elem in config['ilmn']:
-#             if _is_file(elem):
-#                 shell(
-#                     f"""
-#                     cp {elem} {output.r1}
-#                     cp {elem} {output.r2}
-#                     """
-#                 )
-#             else:
-#                 shell(
-#                     f"""
-#                     download-ngs-files sample {wildcards.sample} -cp -o {params}
-#                     """
-#                 )
+
+rule download_reads:
+    output:
+        r1 = temp(Path(config['outdir']) / '{sample}/illumina/raw/{sample}_1.fastq'),
+        r2 = temp(Path(config['outdir']) / '{sample}/illumina/raw/{sample}_2.fastq')
+    params:
+        outdir = lambda wildcards: Path(config['outdir']) / f'{wildcards.sample}/illumina/raw'
+    run:
+        shell(
+            """
+            fastq-dump --split-files {wildcards.sample} -O {params.outdir}
+            """
+        )
+
+
 
 rule concat_ilmn:
     output:

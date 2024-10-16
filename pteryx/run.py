@@ -69,83 +69,6 @@ ASSEMBLERS = [
 
 DEMO_BUCKET = 's3://ngs-training-2f0ac09a-demo-us-east-2/'
 
-DATASTORE_QUERY_PAIRED_READS = '''
-query datastorePairedReads($sample: Float!) {
-    datastoreAttachments(dataset_SampleId: $sample, dataset_DatasetType_Id: 16, name_Endswith:"_paired.fastq.gz") {
-        items {
-            name
-            url
-            updatedOn
-        }
-    }
-}
-'''
-
-DATASTORE_QUERY_NANOPORE_READS = '''
-query datastoreNanoporeSampleAttachments($sample: Float) {
-  datastoreAttachments(dataset_SampleId: $sample) {
-    items {
-      name
-      url
-      updatedOn
-    }
-  }
-}
-'''
-
-def submit_job(memory=300, cpus=96, **kwargs):
-    """Submit a job to BaaS by making the appropriate request
-
-    Makes a POST request to the `ngs-training BaaS environment http://batch.ngs-training.ginkgo.zone/submit`_.
-
-    :param sample: LIMS Sample ID
-    :type sample: int
-    :param memory: Amount of RAM to provision for the job, defaults to 100
-    :type memory: int, optional
-    :param cpu: Number of CPUs to provision for the job, defaults to 16
-    :type cpu: int, optional
-    :return: The AWS Batch jobId for future querying/retrieving
-    :rtype: str
-    """
-    jobParams = []
-    kwargs.pop('batch')  # remove "batch" if its in there so we can queue the right cmd
-    for kw, arg in kwargs.items():
-        if arg == []:
-            continue
-        elif (arg == ['all']) or (arg == 'all'):
-            logger.info('selected all possible targets')
-            continue        
-        elif arg is True:
-            if kw == 'batch':
-                continue
-            jobParams.append(f'--{kw}')
-        elif type(arg) == list:
-            jobParams.append((f'--{kw} {" ".join(map(str, arg))}'))
-
-    response = requests.post(
-        'http://batch.ngs-training.ginkgo.zone/submit',
-        json={
-            'jobDefinition': 'bbypteryx',
-            'jobParams': 'pteryx " ".join(jobParams)',
-            'jobEnvironment': {
-                'GRAPHQL_URL': 'https://graphql.ginkgobioworks.com/graphql',
-                'CURIOUS_URL': 'https://curious.ginkgobioworks.com',
-                'GINKGO_ENVIRONMENT': 'development',
-                'GINKGO_APP_STATE': 'serving'
-            },
-            'memory': 1024 * memory,
-            'cpus': cpus,
-            'timeout': 86400,
-        }
-    )
-    logger.info(f'Running: pteryx {jobParams}')
-    logger.info(response.json())
-    return response.json()['jobId']
-
-def query_job(jobId):
-    resp = requests.post('http://batch.ngs-training.ginkgo.zone/query', json={'jobId': jobId}).json()
-    return resp
-
 def main():
     args = parse_arguments()
     args.outdir.mkdir(exist_ok=True)
@@ -160,10 +83,10 @@ def main():
         status = query_job(args.query)
         logger.info(pformat(status))
         return
-    try:
-        prepare_reads(args)
-    except:
-        raise ValueError('Read preparation failed!')
+    # try:
+        # prepare_reads(args)
+    # except:
+        # raise ValueError('Read preparation failed!')
     try:
         run_workflow(args)
     except:

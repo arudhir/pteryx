@@ -1,5 +1,4 @@
 import pathlib
-from ginkgo_common.utils import run_executable
 
 FLYE_ASSEMBLY_OUTDIR = pathlib.Path(config['outdir']) / 'assemblies/flye'
 

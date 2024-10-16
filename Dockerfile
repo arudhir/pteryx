@@ -119,8 +119,8 @@ RUN wget https://ftp.ncbi.nlm.nih.gov/asn1-converters/by_program/table2asn/linux
 ##############
 ### QUAST ####
 ##############
-#RUN wget https://downloads.sourceforge.net/project/quast/quast-5.0.2.tar.gz \
-    #&& tar -xzf quast-5.0.2.tar.gz
+RUN wget https://downloads.sourceforge.net/project/quast/quast-5.0.2.tar.gz \
+    && tar -xzf quast-5.0.2.tar.gz
 
 ##############
 ### Prokka ###
@@ -152,15 +152,15 @@ RUN git clone https://github.com/fenderglass/Flye \
 ##################
 #### Unicycler ###
 ##################
-#RUN git clone https://github.com/rrwick/Unicycler.git \
-    #&& cd Unicycler \
-    #&& python3 setup.py install
+RUN git clone https://github.com/rrwick/Unicycler.git \
+    && cd Unicycler \
+    && python3 setup.py install
 
 ##################
 #### Barrnap #####
 ##################
-#RUN wget -O barrnap-0.8.tar.gz https://github.com/tseemann/barrnap/archive/0.8.tar.gz \
-    #&& tar -zxvf barrnap-0.8.tar.gz
+RUN wget -O barrnap-0.8.tar.gz https://github.com/tseemann/barrnap/archive/0.8.tar.gz \
+    && tar -zxvf barrnap-0.8.tar.gz
 
 ##################
 #### Bandage #####
@@ -171,8 +171,8 @@ RUN git clone https://github.com/fenderglass/Flye \
 ##################
 ##### seqkit #####
 ##################
-#RUN wget https://github.com/shenwei356/seqkit/releases/download/v2.1.0/seqkit_linux_amd64.tar.gz \
-    #&& tar -zxvf seqkit_linux_amd64.tar.gz
+RUN wget https://github.com/shenwei356/seqkit/releases/download/v2.1.0/seqkit_linux_amd64.tar.gz \
+    && tar -zxvf seqkit_linux_amd64.tar.gz
 
 ##################
 ##### Pilon ######
@@ -195,10 +195,10 @@ RUN git clone https://github.com/rrwick/Porechop.git \
 ##################
 ##### Prodigal ###
 ##################
-#RUN wget --output-document prodigal.tar.gz https://github.com/hyattpd/Prodigal/archive/v2.6.3.tar.gz \
-    #&& tar -zxvf prodigal.tar.gz \
-    #&& cd Prodigal-2.6.3/ \
-    #&& make install INSTALLDIR=/usr/bin/
+RUN wget --output-document prodigal.tar.gz https://github.com/hyattpd/Prodigal/archive/v2.6.3.tar.gz \
+    && tar -zxvf prodigal.tar.gz \
+    && cd Prodigal-2.6.3/ \
+    && make install INSTALLDIR=/usr/bin/
 
 ##################
 ##### Sepp #######
@@ -218,13 +218,13 @@ RUN git clone https://github.com/rrwick/Porechop.git \
 ##################
 ##### Racon ######
 ##################
-#RUN wget https://github.com/isovic/racon/releases/download/1.3.1/racon-v1.3.1.tar.gz \
-    #&& tar -xf racon-v1.3.1.tar.gz \
-    #&& cd racon-v1.3.1 \
-    #&& mkdir build \
-    #&& cd build \
-    #&& cmake -DCMAKE_BUILD_TYPE=Release .. \
-    #&& make
+RUN wget https://github.com/isovic/racon/releases/download/1.3.1/racon-v1.3.1.tar.gz \
+    && tar -xf racon-v1.3.1.tar.gz \
+    && cd racon-v1.3.1 \
+    && mkdir build \
+    && cd build \
+    && cmake -DCMAKE_BUILD_TYPE=Release .. \
+    && make
 
 ##################
 ##### ntEdit #####
@@ -245,10 +245,10 @@ RUN git clone https://github.com/rrwick/Porechop.git \
 ##################
 ##### Minimap2 ###
 ##################
-#WORKDIR $TOOLS
-#RUN git clone https://github.com/lh3/minimap2 \
-    #&& cd minimap2 \
-    #&& make
+WORKDIR $TOOLS
+RUN git clone https://github.com/lh3/minimap2 \
+    && cd minimap2 \
+    && make
 
 ##################
 #### minigraph ###
@@ -277,8 +277,8 @@ RUN git clone https://github.com/lh3/miniasm  \
 ##################
 ##### Shasta #####
 ##################
-#RUN curl -O -L https://github.com/chanzuckerberg/shasta/releases/download/0.6.0/shasta-Linux-0.6.0 \
-    #&& chmod ugo+x shasta-Linux-0.6.0
+RUN curl -O -L https://github.com/chanzuckerberg/shasta/releases/download/0.6.0/shasta-Linux-0.6.0 \
+    && chmod ugo+x shasta-Linux-0.6.0
 
 ################
 #### SKESA #####
@@ -291,9 +291,9 @@ RUN git clone https://github.com/ncbi/SKESA \
 ################
 #### DIAMOND ###
 ################
-#RUN wget https://github.com/bbuchfink/diamond/releases/download/v2.0.5/diamond-linux64.tar.gz && \
-    #tar -xvf diamond-linux64.tar.gz && \
-    #rm diamond-linux64.tar.gz
+RUN wget https://github.com/bbuchfink/diamond/releases/download/v2.0.5/diamond-linux64.tar.gz && \
+    tar -xvf diamond-linux64.tar.gz && \
+    rm diamond-linux64.tar.gz
 
 ##################
 #### Botowraps ###
@@ -305,9 +305,9 @@ RUN git clone https://github.com/ncbi/SKESA \
 ##################
 ###### seqtk #####
 ##################
-#RUN git clone https://github.com/lh3/seqtk.git \
-    #&& cd seqtk \
-    #&& make
+RUN git clone https://github.com/lh3/seqtk.git \
+    && cd seqtk \
+    && make
 
 ##################
 ###### fastp #####
@@ -387,9 +387,9 @@ RUN wget https://github.com/ablab/spades/releases/download/v4.0.0/SPAdes-4.0.0-L
 ###############
 #### csvtk ####
 ###############
-#WORKDIR ${TOOLS}
-#RUN wget https://github.com/shenwei356/csvtk/releases/download/v0.23.0/csvtk_linux_amd64.tar.gz \
-    #&& tar xvf csvtk_linux_amd64.tar.gz
+WORKDIR ${TOOLS}
+RUN wget https://github.com/shenwei356/csvtk/releases/download/v0.23.0/csvtk_linux_amd64.tar.gz \
+    && tar xvf csvtk_linux_amd64.tar.gz
 
 ##############
 ### Merqury ##
