@@ -25,20 +25,21 @@ if config.get('ilmn'):
     targets.add(rules.biosyntheticspades.output)
 if config.get('ont'):
     include: 'rules/read_processing/nanopore.smk'
-    include: 'rules/assembly/shasta.smk'
-    include: 'rules/assembly/canu.smk'
+    include: 'rules/assembly/nanopore_unicycler.smk'
     include: 'rules/assembly/flye.smk'
     include: 'rules/assembly/miniasm.smk'
+    # include: 'rules/assembly/shasta.smk'
+    # include: 'rules/assembly/canu.smk'
     # targets.add(rules.processed_nanoplot.output)
-    targets.add(rules.canu.output)
+    # targets.add(rules.canu.output)
     targets.add(rules.flye.output)
     targets.add(rules.miniasm.output)
+    targets.add(rules.nanopore_unicycler.output)
 if config.get('ilmn') and config.get('ont'):
     include: 'rules/assembly/unicycler.smk'
     include: 'rules/assembly/hybridspades.smk'
     targets.add(rules.hybridspades.output)
-    targets.add(rules.unicycler.output)
-    targets.add(rules.hybridspades.output)
+    targets.add(rules.hybrid_unicycler.output)
 
 rule all:
     input:

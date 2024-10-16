@@ -1,26 +1,19 @@
 import pathlib
 
 ASSEMBLY_OUTDIR = pathlib.Path(config['outdir']) / 'assemblies'
-
-rule hybrid_unicycler:
+rule nanopore_unicycler:
     input:
-       r1 = rules.process_illumina.output.r1,
-       r2 = rules.process_illumina.output.r2,
-       nanopore = rules.process_nanopore.output.ont
+        nanopore = rules.process_nanopore.output.ont
     output:
         assembly = ASSEMBLY_OUTDIR / 'unicycler/unicycler.fa'
     params:
         outdir = ASSEMBLY_OUTDIR / 'unicycler',
-        spades_path = '/tools/SPAdes-3.13.0-Linux/bin/spades.py',
-        original_fasta_name = ASSEMBLY_OUTDIR / 'assembly.fasta'
+        original_fasta_name = ASSEMBLY_OUTDIR / 'unicycler/assembly.fasta'
     threads: workflow.cores
     run:
         shell(
             """
             unicycler \
-            --no_pilon \
-            --short1 {input.r1} \
-            --short2 {input.r2} \
             --long {input.nanopore} \
             --out {params.outdir} \
             --threads {threads} \

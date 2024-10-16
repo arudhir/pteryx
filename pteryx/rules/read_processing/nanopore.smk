@@ -14,32 +14,25 @@ def pick_preprocessing_strategy(config):
     if config.get('canu_correct'):
         return rules.compress_canu.output
     else:
-        return rules.filtlong.output
+        return rules.porechop.output
 
-
-# rule download_nanopore:
-#     output:
-#         ont = ONT_READ_DIR / 'datastore/{sample}.ont.fq.gz'
-#     params:
-#         ONT_READ_DIR
-#     run:
-#         if Path(config['ont']).exists():
-#             shell(
-#                 """
-#                 cp {config[ont]} {output.ont}
-#                 """
-#             )
-#         else:
-#             shell(
-#                 f"""
-#                 download-ngs-files sample {wildcards.sample} -o {params}
-#                 mv {params}/*.fastq.gz {output.ont}
-#                 """
-#             )
+rule download_nanopore:
+    output:
+        r1 = temp(Path(config['outdir']) / 'nanopore/raw/{sample}.fastq'),
+    params:
+        outdir = lambda wildcards: Path(config['outdir']) / f'nanopore/raw'
+    run:
+        shell(
+            """
+            fasterq-dump {wildcards.sample} -O {params.outdir}
+            """
+        )
 
 rule concat_nanopore:
+    input:
+        r1 = expand(rules.download_nanopore.output, sample=config['ont'])
     output:
-        ONT_READ_DIR / 'raw/ont.datastore.fq.gz'
+        ONT_READ_DIR / 'raw/ont.fq.gz'
     params:
         ONT_READ_DIR / 'raw'
     log:    
@@ -47,25 +40,25 @@ rule concat_nanopore:
     run:
         shell(
             """
-            zcat {params}/*ont* | pigz > {output} 2> {log}
+            cat {params}/*.fastq | pigz > {output} 2> {log}
             """
         )
 
-rule sanitize_nanopore:
-    input:
-        rules.concat_nanopore.output
-    output:
-        ONT_READ_DIR / 'datastore/ont.clean.fq.gz'
-    threads: workflow.cores
-    log: ONT_READ_DIR / 'sanitize.log'
-    run:
-        shell(
-            'seqkit sana {input} | pigz > {output} 2> {log}'
-        )
+# rule sanitize_nanopore:
+#     input:
+#         rules.concat_nanopore.output
+#     output:
+#         ONT_READ_DIR / 'raw/ont.clean.fq.gz'
+#     threads: workflow.cores
+#     log: ONT_READ_DIR / 'sanitize.log'
+#     run:
+#         shell(
+#             'seqkit sana {input} -o {output} 2> {log}'
+#         )
 
 rule filtlong:
     input:
-        raw_ont = rules.sanitize_nanopore.output
+        raw_ont = rules.concat_nanopore.output
     output:
         temp(ONT_READ_DIR / 'filtlong/ont.filtlong.fq.gz')
     params:
@@ -89,21 +82,29 @@ rule filtlong:
 
 rule porechop:
     input:
-        rules.filtlong.output
+        ont = rules.filtlong.output
     output:
-        temp(ONT_READ_DIR / 'porechop_out/ont.trimmed.fq')
+        temp(ONT_READ_DIR / 'porechop_out/ont.trimmed.fq.gz')
     threads: workflow.cores
     log:
         ONT_READ_DIR / 'porechop.log'
+    params:
+        porechop_output = ONT_READ_DIR / 'porechop_out/ont.trimmed.fq'
     run:
         shell(
             """
             porechop \
-            -i {input.raw_ont} \
-            -o {output} \
+            -i {input.ont} \
+            -o {params.porechop_output} \
             --require_two_barcodes \
             -t {threads} \
             > {log}
+            """
+        )
+
+        shell(
+            """
+            pigz {params.porechop_output}
             """
         )
 
@@ -123,7 +124,7 @@ rule canu_correct:
             genomeSize={params.genomeSize}
             """
         )
-        # Using run_executable errors out but shell() works
+
 
 rule compress_canu:
     input:

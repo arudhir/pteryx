@@ -145,9 +145,12 @@ RUN git clone https://github.com/fenderglass/Flye \
 #################
 #### Filtlong ###
 #################
-#RUN git clone https://github.com/rrwick/Filtlong.git \
-    #&& cd Filtlong \
-    #&& make -j
+# 10/15/2024: Filtlong fails to compile on modern systems due to missing cstdint header
+# https://github.com/rrwick/Filtlong/issues/42
+RUN git clone https://github.com/rrwick/Filtlong.git \
+    && cd Filtlong \
+    && sed -i '1i #include <cstdint>' src/kmers.h \
+    && make -j
 
 ##################
 #### Unicycler ###
@@ -399,12 +402,16 @@ RUN wget https://github.com/marbl/merqury/archive/v1.3.tar.gz \
     && tar -zxvf v1.3.tar.gz
 ENV MERQURY=${TOOLS}/merqury-1.3
 
-
-#WORKDIR ${TOOLS}
-#RUN prokka-1.14.0/bin/prokka --setupdb
+###################
+### SRA toolkit ###
+###################
+WORKDIR ${TOOLS}
+RUN wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz \
+    && tar -zxvf sratoolkit.current-ubuntu64.tar.gz
+ENV SRA_TOOLKIT=${TOOLS}/sratoolkit.2.11.2-ubuntu64
 
 ### Set PATH and do some extraneous steps
-ENV PATH=/:/usr/src/pteryx/pteryx:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.9.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:$PATH
+ENV PATH=/:/usr/src/pteryx/pteryx:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.9.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:/tools/sratoolkit.3.1.1-ubuntu64/bin:$PATH
 
 #RUN rm ${TOOLS}/*.gz && \
     #rm ${TOOLS}/*.zip

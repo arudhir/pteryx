@@ -18,7 +18,7 @@ def _is_file(val):
     return Path(val).exists()
     
 
-rule download_reads:
+rule download_illumina:
     output:
         r1 = temp(Path(config['outdir']) / '{sample}/illumina/raw/{sample}_1.fastq'),
         r2 = temp(Path(config['outdir']) / '{sample}/illumina/raw/{sample}_2.fastq')
@@ -32,8 +32,10 @@ rule download_reads:
         )
 
 
-
 rule concat_ilmn:
+    input:
+        r1 = expand(rules.download_illumina.output.r1, sample=config['ilmn']),
+        r2 = expand(rules.download_illumina.output.r2, sample=config['ilmn'])
     output:
         r1 = ILMN_READ_DIR / 'concat_reads/1.fq.gz',
         r2 = ILMN_READ_DIR / 'concat_reads/2.fq.gz'
@@ -42,8 +44,8 @@ rule concat_ilmn:
     run:
         shell(
             """
-            zcat {params}/*1*.fq.gz | pigz > {output.r1}
-            zcat {params}/*2*.fq.gz | pigz > {output.r2}
+            zcat {input.r1} | pigz > {output.r1}
+            zcat {input.r2} | pigz > {output.r2}
             """
         )
 

@@ -9,5 +9,5 @@ services:
       - ./pteryx/workflow:/pteryx/workflow
       - ./tests:/usr/src/pteryx/tests
       - ./tests/fixtures/mesoplasma:/pteryx/inputs
-      - ./outputs:/pteryx/outputs
       - .:/usr/src/pteryx
+      - /mnt/data2/pteryx_outputs:/usr/src/pteryx/outputs

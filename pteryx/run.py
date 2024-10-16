@@ -36,6 +36,10 @@ from logging.handlers import RotatingFileHandler
 import sys
 
 def setup_logger(log_file='outputs/pteryx.log'):
+    # Create the log directory if it doesn't exist—needed if our 
+    # output directory is outside the development directory
+    if not Path(log_file).parent.exists():
+        Path(log_file).parent.mkdir(parents=True, exist_ok=True)
     # Create a logger
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
@@ -115,164 +119,11 @@ def md5zip(zipfile):
         m.update(data)
         return m.hexdigest()
 
-def upload_to_bucket(args):
-    bucket_name = os.environ.get('AWS_BUCKET', 'baas-code-bucket-batchoutputbucket-apyskta34alv')
-
-    logger.info(f'Trying to upload to BaaS bucket: {bucket_name}')
-    logger.info('Creating zip archive')
-    shutil.make_archive(
-        base_name=f'outputs', 
-        root_dir=os.path.join(os.getcwd(), 'outputs'),
-        format='zip'
-    )
-
-    zipfile = md5zip('outputs.zip') + '.zip'
-    logger.debug(f'zipfile hash: {zipfile}')
-
-    logger.info('Checking to see if a result already exists for this...')
-    
-    # Check if file already exists
-    s3 = boto3.resource('s3')
-    bucket = s3.Bucket(bucket_name)
-    hits = list(bucket.objects.filter(Prefix=zipfile))
-    if len(hits) > 0:
-        if args.force:
-            logger.warning('Overwriting previous result...')
-        else:
-            raise ExistingResultError('Result already exists. Run with --force to overwrite')
-    
-
-    remote_path = upload_s3_asset(
-        asset='outputs.zip', 
-        path=zipfile,
-        bucket=bucket_name
-    )
-    logger.info(remote_path)
-
-    try:
-        ret = upload_batch_results(
-            {
-                "errors": [],
-                "notification": "bbypteryx run complete!",
-                "files": {
-                    "bbypteryx": {"path": remote_path, "dataset_type": 22},
-                },
-            }
-        )
-    except:
-        logger.error('Can\'t upload to Batch: not in BaaS environment!')
-
-def gql_query(query, variables):
-    """Query GraphQL-staging
-
-    Parameters
-    ----------
-    query : string
-        GraphQL query
-    variables : dict
-        Variables to give GraphQL
-    """
-    def make_request_with_retry(url, payload, **kwargs):
-
-        def post_and_raise(*args, **kwargs):
-            response = requests.post(*args, **kwargs)
-            response.raise_for_status()
-            return response
-
-        with Retry(post_and_raise, [HTTPError], max_attempts=5) as post:
-            response = post(url, json=payload, **kwargs)
-        response = response.json()
-
-        if response.get('errors'):
-            logger.error(response)
-            raise Exception(response['errors'])
-        else:
-            return response['data']
-
-    resp = make_request_with_retry(
-      GRAPHQL_URL, {
-          'query': query,
-          'variables': variables
-      },
-      headers={'HTTP_USERNAME': GRAPHQL_DEFAULT_USERNAME}
-    )
-    
-    return resp
 
 def make_directory(path):
     path = Path(path)
     path.mkdir(parents=True, exist_ok=True)
-    return path
-
-def paired_reads_url(sample):
-    resp = gql_query(DATASTORE_QUERY_PAIRED_READS, {'sample': sample})
-    reads = resp['datastoreAttachments']['items']
-
-    # In case there are multiple forwards/reverse reads, sort by updated on and pick first
-    # Should this be the default for anything we're grabbing off Datastore... pretty much always?
-    get_first = lambda iterable, predicate: next(x for x in iterable if predicate(x))
-    reads = sorted(reads, key=lambda read: read['updatedOn'], reverse=True)
-    try:
-        forward = get_first(reads, lambda read: 'R1' in read['name'])['url']
-        reverse = get_first(reads, lambda read: 'R2' in read['name'])['url']
-    except StopIteration:
-        raise Exception(f'Unable to find both forward and reverse reads from {reads}')
-    return forward, reverse
-
-def nanopore_reads_url(sample):
-    resp = gql_query(DATASTORE_QUERY_NANOPORE_READS, {'sample': sample})
-    reads = resp['datastoreAttachments']['items']
-    get_first = lambda iterable, predicate: next(x for x in iterable if predicate(x))
-    reads = sorted(reads, key=lambda read: read['updatedOn'], reverse=True)    
-    return reads[0]['url']
-    
-def prepare_reads(args):
-    """Take local reads and put them in the starting directory or download Datastore samples
-
-    input: args
-        argparse.Namespace
-        just a dict in disguise
-    returns:
-        None
-    """
-    #TODO: This should be refactored, too much repetition -- it'll make PacBio easier
-    if args.ilmn:
-        ilmn_outdir = args.outdir / 'illumina/raw'
-        ilmn_outdir.mkdir(parents=True, exist_ok=True)    
-        for entry in args.ilmn:
-            entry = Path(entry)
-            if entry.exists():
-                logger.debug(f'{entry} exists, copying it over to expected location')
-                input_dir, sample = entry.parent, entry.stem.split('.')[0]  # sample ID
-                resp = subprocess.check_call(
-                    f"""
-                    cp {input_dir}/{sample}.1*.fq.gz {ilmn_outdir}/{sample}.1.paired.fq.gz
-                    cp {input_dir}/{sample}.2*.fq.gz {ilmn_outdir}/{sample}.2.paired.fq.gz
-                    """, shell=True
-                )
-            else:
-                sample = int(entry.name)
-                logger.info(f'Downloading ilmn reads for s{sample} from Datastore')
-                forward_url, reverse_url = paired_reads_url(sample)
-                download_s3_asset(s3_url=forward_url, save_to=ilmn_outdir / f'{sample}.1.fq.gz')
-                download_s3_asset(s3_url=reverse_url, save_to=ilmn_outdir / f'{sample}.2.fq.gz')
-    if args.ont:
-        ont_outdir = args.outdir / 'nanopore/raw'
-        ont_outdir.mkdir(parents=True, exist_ok=True)
-        for entry in args.ont:
-            entry = Path(entry)
-            if entry.exists():
-                input_dir, sample = Path(entry).parent, Path(entry).stem.split('.')[0]
-                resp = subprocess.check_call(
-                    f"""
-                    cp {input_dir}/{sample}.ont.fq.gz {ont_outdir}/{sample}.ont.fq.gz
-                    """, shell=True
-                )
-            else:
-                sample = int(entry.name)
-                logger.debug(f'Downloading nanopore for s{sample} from Datastore')
-                nanopore_url= nanopore_reads_url(sample)
-                download_s3_asset(s3_url=nanopore_url, save_to=ont_outdir / f'{sample}.ont.fq.gz')
+    return path    
 
 
 def get_assembly_stats(args):
