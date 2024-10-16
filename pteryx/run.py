@@ -19,12 +19,7 @@ from snakemake.settings.types import (
         ConfigSettings,
         DAGSettings
     )
-
-# from snakemake import snakemake
-# from ginkgo_common.utils import Retry, call_executable, upload_s3_asset, upload_batch_results, download_s3_asset, datastore
-# from ginkgo_common.logger import logger
-# from ginkgo_common.constants import GRAPHQL_DEFAULT_USERNAME, GRAPHQL_URL
-
+from Bio import SeqIO
 import shutil 
 import pteryx 
 from .cli import parse_arguments
@@ -76,28 +71,13 @@ DEMO_BUCKET = 's3://ngs-training-2f0ac09a-demo-us-east-2/'
 def main():
     args = parse_arguments()
     args.outdir.mkdir(exist_ok=True)
-
-    if args.batch:
-        jobId = submit_job(**vars(args))
-        with open('jobIds.log', 'a+') as f:
-            f.write(jobId)
-            f.write('\n')
-        return jobId
-    if args.query:
-        status = query_job(args.query)
-        logger.info(pformat(status))
-        return
-    # try:
-        # prepare_reads(args)
-    # except:
-        # raise ValueError('Read preparation failed!')
     try:
         run_workflow(args)
     except:
         raise ValueError('Snakemake failed!')
 
-    # valid_assemblies = # the not empty ones
-
+    valid_assemblies = get_valid_assemblies(args)
+    print(valid_assemblies)
     try:
         stats = get_assembly_stats(args)
         logger.info(pformat(stats))
@@ -106,6 +86,19 @@ def main():
 
     if args.s3:
         upload_to_bucket(args)
+
+def get_valid_assemblies(args):
+    assembly_dir = args.outdir / 'assemblies'
+    valid_assemblies = []
+    for asm in assembly_dir.rglob('*.fa'):
+        try:
+            assembly = list(SeqIO.parse(asm, format='fasta'))
+        except:
+            print(f'{asm} is not a valid FASTA file!')
+            continue
+        if len(assembly) > 0:
+            valid_assemblies.append(asm)
+    return valid_assemblies
 
 def md5zip(zipfile):
     """Gets the md5 of a zipfile for unique naming purposes
@@ -158,8 +151,10 @@ def get_assembly_stats(args):
         json.dump(stats, f)
     return stats
 
+
 def validate_args(args):
     pass
+
 
 def run_workflow(args):
     with SnakemakeApi(

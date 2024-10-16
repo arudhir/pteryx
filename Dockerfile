@@ -103,8 +103,8 @@ ENV HTSLIB="${TOOLS}/htslib-1.9/htslib"
 ############
 ### BLAST ##
 ############
-RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.9.0/ncbi-blast-2.9.0+-x64-linux.tar.gz \
-    && tar -zxvf ncbi-blast-2.9.0+-x64-linux.tar.gz
+RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.14.0/ncbi-blast-2.14.0+-x64-linux.tar.gz \
+    && tar -zxvf ncbi-blast-2.14.0+-x64-linux.tar.gz
 
 ##############
 ### tbl2asn ##
@@ -294,7 +294,7 @@ RUN git clone https://github.com/ncbi/SKESA \
 ################
 #### DIAMOND ###
 ################
-RUN wget https://github.com/bbuchfink/diamond/releases/download/v2.0.5/diamond-linux64.tar.gz && \
+RUN wget https://github.com/bbuchfink/diamond/releases/download/v2.1.8/diamond-linux64.tar.gz && \
     tar -xvf diamond-linux64.tar.gz && \
     rm diamond-linux64.tar.gz
 
@@ -410,11 +410,60 @@ RUN wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-u
     && tar -zxvf sratoolkit.current-ubuntu64.tar.gz
 ENV SRA_TOOLKIT=${TOOLS}/sratoolkit.2.11.2-ubuntu64
 
-### Set PATH and do some extraneous steps
-ENV PATH=/:/usr/src/pteryx/pteryx:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.9.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:/tools/sratoolkit.3.1.1-ubuntu64/bin:$PATH
+#######################
+### AMRFinder Plus ####
+#######################
+WORKDIR ${TOOLS}
+RUN wget https://github.com/ncbi/amr/releases/download/amrfinder_v3.12.8/amrfinder_binaries_v3.12.8.tar.gz \
+    && tar -zxvf amrfinder_binaries_v3.12.8.tar.gz \
+    && ${TOOLS}/amrfinder -u
 
-#RUN rm ${TOOLS}/*.gz && \
-    #rm ${TOOLS}/*.zip
+### Set PATH and do some extraneous steps
+ENV PATH=/:/usr/src/pteryx/pteryx:/tools:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.14.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:/tools/sratoolkit.3.1.1-ubuntu64/bin:/tools/tRNAscan-SE-2.0.12:/tools/aragorn:/tools/pilercrpy:$PATH
+
+# We're installing Bakta after because it requires AMRFinderPlus to be on PATH
+#############
+### Bakta ###
+#############
+WORKDIR ${TOOLS}
+# RUN wget https://zenodo.org/record/10522951/files/db-light.tar.gz \
+#     && tar -xzf db-light.tar.gz
+RUN uv pip install bakta
+
+##############
+### CheckM ###
+##############
+WORKDIR ${TOOLS}
+RUN git clone https://github.com/Ecogenomics/CheckM.git \
+    && cd CheckM \
+    && python3 setup.py install
+
+###################
+### tRNAscan-SE ###
+###################
+WORKDIR ${TOOLS}
+RUN wget https://github.com/UCSC-LoweLab/tRNAscan-SE/archive/refs/tags/v2.0.12.tar.gz \
+    && tar -xzf v2.0.12.tar.gz \
+    && cd tRNAscan-SE-2.0.12 \
+    && ./configure && make install
+
+###############
+### Aragorn ###
+###############
+WORKDIR ${TOOLS}
+RUN wget https://www.trna.se/Downloads/aragorn1.2.41.c \
+    && gcc -O3 -ffast-math -finline-functions -o aragorn aragorn1.2.41.c
+
+###############$
+### PILER-CR ###
+################
+WORKDIR ${TOOLS}
+RUN git clone https://github.com/widdowquinn/pilercrpy.git \
+    && cd pilercrpy \
+    && python setup.py install
+
+RUN rm ${TOOLS}/*.gz && \
+    rm ${TOOLS}/*.zip
 
 #################################################################################
 # Workflow and homemade scripts

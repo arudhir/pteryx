@@ -20,10 +20,10 @@ def _is_file(val):
 
 rule download_illumina:
     output:
-        r1 = temp(Path(config['outdir']) / '{sample}/illumina/raw/{sample}_1.fastq'),
-        r2 = temp(Path(config['outdir']) / '{sample}/illumina/raw/{sample}_2.fastq')
+        r1 = temp(Path(config['outdir']) / 'illumina/raw/{sample}_1.fastq'),
+        r2 = temp(Path(config['outdir']) / 'illumina/raw/{sample}_2.fastq')
     params:
-        outdir = lambda wildcards: Path(config['outdir']) / f'{wildcards.sample}/illumina/raw'
+        outdir = Path(config['outdir']) / 'illumina/raw'
     run:
         shell(
             """
@@ -44,8 +44,8 @@ rule concat_ilmn:
     run:
         shell(
             """
-            zcat {input.r1} | pigz > {output.r1}
-            zcat {input.r2} | pigz > {output.r2}
+            cat {input.r1} | pigz > {output.r1}
+            cat {input.r2} | pigz > {output.r2}
             """
         )
 

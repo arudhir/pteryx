@@ -22,7 +22,7 @@ if config.get('ilmn'):
     targets.add(rules.skesa.output)
     targets.add(rules.spades.output)
     #targets.add(rules.metaspades.output)
-    targets.add(rules.biosyntheticspades.output)
+    # targets.add(rules.biosyntheticspades.output)
 if config.get('ont'):
     include: 'rules/read_processing/nanopore.smk'
     include: 'rules/assembly/nanopore_unicycler.smk'
