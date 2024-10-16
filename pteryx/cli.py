@@ -86,21 +86,8 @@ def parse_arguments():
     )
 
     parser.add_argument(
-        '--batch', 
-        help='Submit to BaaS', 
-        default=False, 
-        action='store_true'
-    )
-
-    parser.add_argument(
-        '--query',
-        help='Job ID to query',
-        default=False
-    )
-
-    parser.add_argument(
         '--s3',
-        help='Upload to BaaS bucket',
+        help='Upload to bucket',
         default=False,
         action='store_true'
     )

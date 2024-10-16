@@ -140,23 +140,6 @@ docker-compose run --rm pteryx pytest -v
 docker-compose run --rm pteryx pteryx --ilmn inputs/mesoplasma_simulated.1.paired.fq.gz --ont inputs/mesoplasma_simulated.ont.fq.gz
 ```
 
-* Run pipeline using Snakemake on P202 Huue reads and a configfile
-```bash
-docker-compose run --rm pteryx snakemake --configfile tests/fixtures/huue/config.yml -j `nproc`
-```
-
-* Run a host of assemblers using sample_ids from ATCC 904448 _Metarhizium anisopliae_
-```bash
-docker-compose run --rm pteryx pteryx --ilmn 18656599 --ont 18576466 --targets skesa flye spades shasta miniasm
-```
-
-* Run Nanopore assemblers on `Aureobasidium pullulans CBS 771.97 (WT) Colony 2` `s6251894`
-```bash
-docker-compose run --rm pteryx pteryx --ont 7023636 6254004
-```
-
-**n.b.** there is a TSV in `tests/fixtures` with all the genome assembly submissions
-
 # Genome Assembly General
 
 ## Genome Assembly Talk
