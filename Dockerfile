@@ -419,7 +419,7 @@ RUN wget https://github.com/ncbi/amr/releases/download/amrfinder_v3.12.8/amrfind
     && ${TOOLS}/amrfinder -u
 
 ### Set PATH and do some extraneous steps
-ENV PATH=/:/usr/src/pteryx/pteryx:/tools:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.14.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:/tools/sratoolkit.3.1.1-ubuntu64/bin:/tools/tRNAscan-SE-2.0.12:/tools/aragorn:/tools/pilercrpy:/tools/dfast_core-1.3.0:$PATH
+ENV PATH=/:/usr/src/pteryx/pteryx:/tools:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.14.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:/tools/sratoolkit.3.1.1-ubuntu64/bin:/tools/tRNAscan-SE-2.0.12:/tools/aragorn:/tools/pilercrpy:/tools/dfast_core-1.3.0:/tools/kma:/tools/plasmidfinder:$PATH
 
 # We're installing Bakta after because it requires AMRFinderPlus to be on PATH
 #############
@@ -471,6 +471,30 @@ RUN rm ${TOOLS}/*.gz && \
 WORKDIR ${TOOLS}
 RUN wget https://github.com/nigyta/dfast_core/archive/refs/tags/1.3.0.tar.gz \
     && tar -xzf 1.3.0.tar.gz 
+
+# libidn.so.11 for blast (dfast)
+# libidn.so.11: cannot open shared object file: No such file or directory
+WORKDIR ${TOOLS}
+RUN wget http://mirrors.kernel.org/ubuntu/pool/main/libi/libidn/libidn11_1.33-2.2ubuntu2_amd64.deb \
+    && apt install ./libidn11_1.33-2.2ubuntu2_amd64.deb
+
+# Taken from DFAST's dockerfile: https://github.com/nigyta/dfast_core/blob/95e9147f3c5fe76620c07f62ac93ffa799f82dbc/dfc_docker/Dockerfile#L35
+# To enable plasmidfinder and kma
+#########################
+### plasmidfinder #######
+#########################
+WORKDIR ${TOOLS}
+RUN git clone https://bitbucket.org/genomicepidemiology/plasmidfinder.git && \
+cd plasmidfinder
+
+################
+### KMA ########
+################
+WORKDIR ${TOOLS}
+RUN git clone --branch 1.0.1 --depth 1 https://bitbucket.org/genomicepidemiology/kma.git && \
+    cd kma \
+    && make
+
 
 #################################################################################
 # Workflow and homemade scripts
