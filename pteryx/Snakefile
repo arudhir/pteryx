@@ -1,16 +1,10 @@
 import sys
 from utils import value_to_float, get_insert_size
-#from ginkgo_common.utils import upload_s3_asset
-
-# import logging
-# _logger = logging.getLogger()
-# _logger.setLevel(30)
-
+import os
+from Bio import SeqIO
+from snakemake.io import expand
 
 outdir = config['outdir']
-
-# These have to be below the imports because otherwise Snakemake will try and
-# evaluate the inputs/outputs before the imports, causing a NameError
 
 # Determine what assemblies we should do based on the input reads
 targets = set()
@@ -41,9 +35,23 @@ if config.get('ilmn') and config.get('ont'):
     targets.add(rules.hybridspades.output)
     targets.add(rules.hybrid_unicycler.output)
 
+include: 'rules/annotate/dfast.smk'
+
+# Define ASSEMBLERS list based on your configuration
+ASSEMBLERS = []
+if config.get('ilmn'):
+    ASSEMBLERS += ['spades', 'skesa']
+if config.get('ont'):
+    # ASSEMBLERS += ['flye', 'miniasm', 'nanopore_unicycler']
+    ASSEMBLERS += ['flye', 'miniasm']
+
+if config.get('ilmn') and config.get('ont'):
+    ASSEMBLERS += ['hybridspades', 'hybrid_unicycler']
+
 rule all:
     input:
-        targets
+        targets,
+        expand(f"{outdir}/annotations/{{assembler}}/{{assembler}}.gff", assembler=ASSEMBLERS)
 
 
 

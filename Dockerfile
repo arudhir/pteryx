@@ -419,7 +419,7 @@ RUN wget https://github.com/ncbi/amr/releases/download/amrfinder_v3.12.8/amrfind
     && ${TOOLS}/amrfinder -u
 
 ### Set PATH and do some extraneous steps
-ENV PATH=/:/usr/src/pteryx/pteryx:/tools:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.14.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:/tools/sratoolkit.3.1.1-ubuntu64/bin:/tools/tRNAscan-SE-2.0.12:/tools/aragorn:/tools/pilercrpy:$PATH
+ENV PATH=/:/usr/src/pteryx/pteryx:/tools:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.14.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:/tools/sratoolkit.3.1.1-ubuntu64/bin:/tools/tRNAscan-SE-2.0.12:/tools/aragorn:/tools/pilercrpy:/tools/dfast_core-1.3.0:$PATH
 
 # We're installing Bakta after because it requires AMRFinderPlus to be on PATH
 #############
@@ -464,6 +464,13 @@ RUN git clone https://github.com/widdowquinn/pilercrpy.git \
 
 RUN rm ${TOOLS}/*.gz && \
     rm ${TOOLS}/*.zip
+
+################
+### DFAST ######
+################
+WORKDIR ${TOOLS}
+RUN wget https://github.com/nigyta/dfast_core/archive/refs/tags/1.3.0.tar.gz \
+    && tar -xzf 1.3.0.tar.gz 
 
 #################################################################################
 # Workflow and homemade scripts

@@ -11,3 +11,4 @@ services:
       - ./tests/fixtures/mesoplasma:/pteryx/inputs
       - .:/usr/src/pteryx
       - /mnt/data2/pteryx_outputs:/usr/src/pteryx/outputs
+      - /mnt/data2/dfast_db:/usr/src/pteryx/db

@@ -27,7 +27,7 @@ rule download_illumina:
     run:
         shell(
             """
-            fastq-dump --split-files {wildcards.sample} -O {params.outdir}
+            fasterq-dump --split-files {wildcards.sample} -O {params.outdir}
             """
         )
 

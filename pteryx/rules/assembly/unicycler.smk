@@ -8,17 +8,16 @@ rule hybrid_unicycler:
        r2 = rules.process_illumina.output.r2,
        nanopore = rules.process_nanopore.output.ont
     output:
-        assembly = ASSEMBLY_OUTDIR / 'unicycler/unicycler.fa'
+        assembly = ASSEMBLY_OUTDIR / 'hybrid_unicycler/hybrid_unicycler.fa'
     params:
-        outdir = ASSEMBLY_OUTDIR / 'unicycler',
+        outdir = ASSEMBLY_OUTDIR / 'hybrid_unicycler',
         spades_path = '/tools/SPAdes-3.13.0-Linux/bin/spades.py',
-        original_fasta_name = ASSEMBLY_OUTDIR / 'assembly.fasta'
+        original_fasta_name = ASSEMBLY_OUTDIR / 'hybrid_unicycler/assembly.fasta'
     threads: workflow.cores
     run:
         shell(
             """
             unicycler \
-            --no_pilon \
             --short1 {input.r1} \
             --short2 {input.r2} \
             --long {input.nanopore} \

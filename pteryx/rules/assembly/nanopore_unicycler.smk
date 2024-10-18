@@ -5,10 +5,10 @@ rule nanopore_unicycler:
     input:
         nanopore = rules.process_nanopore.output.ont
     output:
-        assembly = ASSEMBLY_OUTDIR / 'unicycler/unicycler.fa'
+        assembly = ASSEMBLY_OUTDIR / 'nanopore_unicycler/nanopore_unicycler.fa'
     params:
-        outdir = ASSEMBLY_OUTDIR / 'unicycler',
-        original_fasta_name = ASSEMBLY_OUTDIR / 'unicycler/assembly.fasta'
+        outdir = ASSEMBLY_OUTDIR / 'nanopore_unicycler',
+        original_fasta_name = ASSEMBLY_OUTDIR / 'nanopore_unicycler/assembly.fasta'
     threads: workflow.cores
     run:
         shell(

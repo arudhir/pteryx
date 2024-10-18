@@ -166,7 +166,9 @@ def run_workflow(args):
         try:
             workflow = api.workflow(
                 snakefile=Path(pteryx.__path__[0]) / 'Snakefile',
-                workflow_settings=WorkflowSettings(),
+                workflow_settings=WorkflowSettings(
+                    # allow_missing_output=True
+                ),
                 resource_settings=ResourceSettings(
                     cores=args.threads
                 ),
@@ -194,20 +196,3 @@ def run_workflow(args):
         except Exception as e:
             api.print_exception(e)
             return False
-
-
-    # snakemake(
-        # snakefile=Path(pteryx.__path__[0]) / 'Snakefile',
-        # targets=args.targets,
-        # config={
-            # 'ilmn': args.ilmn,
-            # 'ont': args.ont,
-            # 'outdir': args.outdir,
-            # 'canu_correct': args.canu_correct,
-            # 'size': args.size,
-        # },
-        # cores=args.threads,
-        # dryrun=args.dry_run,
-        # printshellcmds=True,
-        # keepgoing=True
-    # )
