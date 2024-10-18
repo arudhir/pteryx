@@ -37,7 +37,6 @@ rule annotate_assembly:
                         '--force '
                         '--no_cdd '
                         '--amr '
-                        '--plasmidfinder '
                         '--cpu {threads}'
                     )
                     shell(f'mv {params.output_dir}/genome.gff {output.gff}')
