@@ -495,6 +495,10 @@ RUN git clone --branch 1.0.1 --depth 1 https://bitbucket.org/genomicepidemiology
     cd kma \
     && make
 
+###############
+### cgecore ###
+###############
+RUN uv pip install cgecore
 
 #################################################################################
 # Workflow and homemade scripts

@@ -42,9 +42,7 @@ ASSEMBLERS = []
 if config.get('ilmn'):
     ASSEMBLERS += ['spades', 'skesa']
 if config.get('ont'):
-    # ASSEMBLERS += ['flye', 'miniasm', 'nanopore_unicycler']
-    ASSEMBLERS += ['flye', 'miniasm']
-
+    ASSEMBLERS += ['flye', 'miniasm', 'nanopore_unicycler']
 if config.get('ilmn') and config.get('ont'):
     ASSEMBLERS += ['hybridspades', 'hybrid_unicycler']
 

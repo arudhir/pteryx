@@ -41,8 +41,8 @@ rule annotate_assembly:
                     )
                     shell(f'mv {params.output_dir}/genome.gff {output.gff}')
                     shell(f'mv {params.output_dir}/genome.gbk {output.gbk}')
-                    shell(f'mv {params.output_dir}/genome.cds.fna {output.cds}')
-                    shell(f'mv {params.output_dir}/genome.rna.fna {output.rna}')
+                    shell(f'mv {params.output_dir}/cds.fna {output.cds}')
+                    shell(f'mv {params.output_dir}/rna.fna {output.rna}')
                     shell(f'mv {params.output_dir}/genome.fna {output.fna}')
                     shell(f'mv {params.output_dir}/genome.embl {output.embl}')
             except Exception as e:
