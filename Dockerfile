@@ -435,7 +435,7 @@ ENV PATH=/:/usr/src/pteryx/pteryx:\
 /tools/bowtie2-2.3.2/:\
 /tools/SPAdes-4.0.0-Linux/bin:\
 /tools/Filtlong/bin:\
-/tools/canu-2.2/Linux-amd64/bin:\
+/tools/canu-2.2/bin:\
 /tools:/usr/bin:\
 /tools/SKESA:\
 /tools/miniasm/:\
