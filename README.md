@@ -4,10 +4,9 @@
 
 ![](docs/images/archen-small.png)
 
-![](plasmidsaurus-dag.png)
-
 # Plasmidsaurus Submission
 
+![](plasmidsaurus-dag.png)
 ```console
 docker-compose run --rm pteryx pteryx --ont SRR30810013 --ilmn SRR30805714 
 ```
