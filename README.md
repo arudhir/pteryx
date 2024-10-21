@@ -35,34 +35,38 @@ spades                    1
 total                    10
 ```
 
-Grab the current production release and run `pteryx`
 ```console
-➜ docker run --rm -it docker.ginkgobioworks.com/ngs-analysis/pteryx:latest pteryx --help
-usage: pteryx [-h] [--outdir OUTDIR] [--targets TARGETS [TARGETS ...]] [-t THREADS] [--ilmn ILMN [ILMN ...]]
-              [--ont ONT [ONT ...]] [--canu_correct] [--size SIZE] [-n]
+$ docker-compose run --rm pteryx pteryx --help                              
+Creating pteryx_pteryx_run ... done
+usage: pteryx [-h] [--outdir OUTDIR] [--targets TARGETS [TARGETS ...]] [-t THREADS]
+              [--ilmn ILMN [ILMN ...]] [--ont ONT [ONT ...]] [--canu_correct]
+              [--size SIZE] [-n] [--s3] [--force]
 
 Run pteryx
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --outdir OUTDIR, -o OUTDIR
                         Output directory (default: outputs)
   --targets TARGETS [TARGETS ...]
                         target rules (default: ['all'])
   -t THREADS, --threads THREADS
-                        Number of cores to use (default: 96)
+                        Number of cores to use (default: 16)
   --size SIZE           genome size in Mbp. (default: 5M)
+  --s3                  Upload to bucket (default: False)
+  --force               Force overwrite on S3 (default: False)
 
 NGS sampleIDs shorts and long:
   --ilmn ILMN [ILMN ...]
-                        Illumina samples (default: None)
-  --ont ONT [ONT ...]   Nanopore samples (default: None)
+                        Illumina samples (default: [])
+  --ont ONT [ONT ...]   Nanopore samples (default: [])
 
 canu-correct:
   --canu_correct        Whether we should run canu-correct or not (default: False)
 
 debugging:
   -n, --dry-run
+
 ```
 
 # how to contribute
