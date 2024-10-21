@@ -121,8 +121,8 @@ rule pilon:
             # Pilon makes the extension .fasta automatically
             shell('cp {params.after}.fasta {params.before}')
 
-        # After polishing, rename the result to become the output
-        shell('mv {params.after}.fasta {output.polished_assembly}')
+            # After polishing, rename the result to become the output
+            shell('mv {params.after}.fasta {output.polished_assembly}')
 
 #def aggregate_pilon(wildcards):
 #    checkpoint_output = checkpoints.pilon.get(**wildcards).output

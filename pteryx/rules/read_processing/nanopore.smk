@@ -120,7 +120,7 @@ rule canu_correct:
         shell(
             """
             canu -correct -nanopore-raw {input} \
-            -p {config[name]} -d {params.canu_dir} \
+            -p canu -d {params.canu_dir} \
             genomeSize={params.genomeSize}
             """
         )
@@ -130,7 +130,7 @@ rule compress_canu:
     input:
         rules.canu_correct.output.canu_reads_fasta
     output:
-        temp('{outdir}/reads/nanopore/ont.correctedReads.fq.gz')
+        temp(ONT_READ_DIR / 'ont.correctedReads.fq.gz')
     run:
         # Convert the FASTA that Canu makes corrected reads as to a FASTQ with fake quality scores
         shell(

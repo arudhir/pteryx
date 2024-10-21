@@ -66,8 +66,6 @@ ASSEMBLERS = [
     'shasta', 'unicycler'
 ]
 
-DEMO_BUCKET = 's3://ngs-training-2f0ac09a-demo-us-east-2/'
-
 def main():
     args = parse_arguments()
     args.outdir.mkdir(exist_ok=True)
@@ -75,6 +73,7 @@ def main():
         run_workflow(args)
     except:
         raise ValueError('Snakemake failed!')
+        sys.exit(1)
 
     valid_assemblies = get_valid_assemblies(args)
     print(valid_assemblies)

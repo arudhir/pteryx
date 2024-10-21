@@ -35,6 +35,7 @@ if config.get('ilmn') and config.get('ont'):
     targets.add(rules.hybridspades.output)
     targets.add(rules.hybrid_unicycler.output)
 
+include: 'rules/polish/racon.smk'
 include: 'rules/annotate/dfast.smk'
 
 # Define ASSEMBLERS list based on your configuration

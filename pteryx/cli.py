@@ -77,6 +77,13 @@ def parse_arguments():
         default='5M'
     )
 
+    # parser.add_argument(
+    #     '--num_racon_iterations',
+    #     help='Number of Racon polishing iterations',
+    #     default=3,
+    #     type=int
+    # )
+
     debug = parser.add_argument_group('debugging')
     debug.add_argument(
         '-n',

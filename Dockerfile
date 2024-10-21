@@ -131,8 +131,8 @@ RUN wget -O prokka-v1.14.tar.gz https://github.com/tseemann/prokka/archive/v1.14
 ##############
 #### Canu ####
 ##############
-RUN wget https://github.com/marbl/canu/releases/download/v1.8/canu-1.8.Linux-amd64.tar.xz \
-    && xz -dc canu-1.8.*.tar.xz | tar -xf -
+RUN curl -L https://github.com/marbl/canu/releases/download/v2.2/canu-2.2.Linux-amd64.tar.xz --output canu-2.2.Linux-amd64.tar.xz \
+    && tar -xJf canu-2.2.*.tar.xz
 
 ##############
 #### Flye ####
@@ -221,9 +221,9 @@ RUN wget --output-document prodigal.tar.gz https://github.com/hyattpd/Prodigal/a
 ##################
 ##### Racon ######
 ##################
-RUN wget https://github.com/isovic/racon/releases/download/1.3.1/racon-v1.3.1.tar.gz \
-    && tar -xf racon-v1.3.1.tar.gz \
-    && cd racon-v1.3.1 \
+RUN wget https://github.com/isovic/racon/releases/download/1.4.3/racon-v1.4.3.tar.gz \
+    && tar -xf racon-v1.4.3.tar.gz \
+    && cd racon-v1.4.3 \
     && mkdir build \
     && cd build \
     && cmake -DCMAKE_BUILD_TYPE=Release .. \
@@ -419,7 +419,39 @@ RUN wget https://github.com/ncbi/amr/releases/download/amrfinder_v3.12.8/amrfind
     && ${TOOLS}/amrfinder -u
 
 ### Set PATH and do some extraneous steps
-ENV PATH=/:/usr/src/pteryx/pteryx:/tools:/tools/ntHits-ntHits-v0.0.1/:/tools/minimap2:/tools/racon/build/bin:/tools/ntEdit/:/tools/racon-v1.3.1/build/bin:/tools/augustus-3.3.2/bin:/tools/augustus-3.3.2/bin/scripts:/tools/ncbi-blast-2.14.0+/bin:/tools/Flye/bin:/tools/prokka-1.14.0/bin/:/tools/barrnap-0.8/bin:/tools/bbmap:/tools/bowtie2-2.3.2/:/tools/SPAdes-4.0.0-Linux/bin:/tools/Filtlong/bin:/tools/canu-1.8/Linux-amd64/bin:/tools:/usr/bin:/tools/SKESA:/tools/miniasm/:/tools/seqtk:/tools/quast-5.0.2:/tools/minigraph:/tools/SPAdes-3.13.0-Linux/bin:$PATH:/tools/mmseqs/bin/:/tools/sratoolkit.3.1.1-ubuntu64/bin:/tools/tRNAscan-SE-2.0.12:/tools/aragorn:/tools/pilercrpy:/tools/dfast_core-1.3.0:/tools/kma:/tools/plasmidfinder:$PATH
+ENV PATH=/:/usr/src/pteryx/pteryx:\
+/tools:/tools/ntHits-ntHits-v0.0.1/:\
+/tools/minimap2:\
+/tools/racon/build/bin:\
+/tools/ntEdit/:\
+/tools/racon-v1.4.3/build/bin:\
+/tools/augustus-3.3.2/bin:\
+/tools/augustus-3.3.2/bin/scripts:\
+/tools/ncbi-blast-2.14.0+/bin:\
+/tools/Flye/bin:\
+/tools/prokka-1.14.0/bin/:\
+/tools/barrnap-0.8/bin:\
+/tools/bbmap:\
+/tools/bowtie2-2.3.2/:\
+/tools/SPAdes-4.0.0-Linux/bin:\
+/tools/Filtlong/bin:\
+/tools/canu-2.2/Linux-amd64/bin:\
+/tools:/usr/bin:\
+/tools/SKESA:\
+/tools/miniasm/:\
+/tools/seqtk:\
+/tools/quast-5.0.2:\
+/tools/minigraph:\
+/tools/SPAdes-3.13.0-Linux/bin:$PATH:\
+/tools/mmseqs/bin/:\
+/tools/sratoolkit.3.1.1-ubuntu64/bin:\
+/tools/tRNAscan-SE-2.0.12:\
+/tools/aragorn:\
+/tools/pilercrpy:\
+/tools/dfast_core-1.3.0:\
+/tools/kma:\
+/tools/plasmidfinder:\
+$PATH
 
 # We're installing Bakta after because it requires AMRFinderPlus to be on PATH
 #############
@@ -499,6 +531,11 @@ RUN git clone --branch 1.0.1 --depth 1 https://bitbucket.org/genomicepidemiology
 ### cgecore ###
 ###############
 RUN uv pip install cgecore
+
+################
+### NanoPlot ###
+################
+RUN uv pip install nanoplot
 
 #################################################################################
 # Workflow and homemade scripts

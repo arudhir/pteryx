@@ -7,7 +7,7 @@ rule flye:
        nanopore = rules.process_nanopore.output.ont
     params:
         flye_outdir = FLYE_ASSEMBLY_OUTDIR,
-        num_polish = 1,
+        num_polish = 3,
         original_fasta_filename = FLYE_ASSEMBLY_OUTDIR / 'assembly.fasta'
     output:
         assembly = FLYE_ASSEMBLY_OUTDIR / 'flye.fa'
@@ -19,7 +19,6 @@ rule flye:
             --nano-raw {input.nanopore} \
             --threads {threads} \
             --iterations {params.num_polish} \
-            --plasmids \
             --out-dir {params.flye_outdir} 
             """
         )

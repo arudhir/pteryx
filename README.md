@@ -6,6 +6,12 @@
 
 ![](dag.png)
 
+# Plasmidsaurus Submission
+
+```console
+docker-compose run --rm pteryx pteryx --ont SRR30810013 --ilmn SRR30805714 
+```
+
 # Quick Start
 
 Currently a WIP.
