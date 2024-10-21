@@ -155,7 +155,7 @@ rule processed_nanoplot:
     input:
         rules.process_nanopore.output
     output:
-        ONT_READ_DIR / 'NanoStats.txt'
+        ONT_READ_DIR / 'processed_nanoplot/NanoStats.txt'
     params:
         outdir = ONT_READ_DIR / 'processed_nanoplot'
     run:
