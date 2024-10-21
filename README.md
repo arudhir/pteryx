@@ -35,6 +35,7 @@ spades                    1
 total                    10
 ```
 
+Run `pteryx` inside the container
 ```console
 $ docker-compose run --rm pteryx pteryx --help                              
 Creating pteryx_pteryx_run ... done
