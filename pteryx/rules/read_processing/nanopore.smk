@@ -150,3 +150,18 @@ rule process_nanopore:
             cp {input} {output.ont}
             """
         )
+
+rule processed_nanoplot:
+    input:
+        rules.process_nanopore.output
+    output:
+        ONT_READ_DIR / 'NanoStats.txt'
+    params:
+        outdir = ONT_READ_DIR / 'processed_nanoplot'
+    run:
+        shell(
+            'NanoPlot '
+            '--fastq {input} '
+            '--outdir {params.outdir} '
+            '--tsv_stats'
+        )

@@ -24,7 +24,7 @@ if config.get('ont'):
     include: 'rules/assembly/miniasm.smk'
     # include: 'rules/assembly/shasta.smk'
     # include: 'rules/assembly/canu.smk'
-    # targets.add(rules.processed_nanoplot.output)
+    targets.add(rules.processed_nanoplot.output)
     # targets.add(rules.canu.output)
     targets.add(rules.flye.output)
     targets.add(rules.miniasm.output)

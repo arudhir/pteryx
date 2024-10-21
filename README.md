@@ -4,7 +4,7 @@
 
 ![](docs/images/archen-small.png)
 
-![](dag.png)
+![](plasmidsaurus-dag.png)
 
 # Plasmidsaurus Submission
 

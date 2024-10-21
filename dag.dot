@@ -1,0 +1,75 @@
+digraph snakemake_dag {
+    graph[bgcolor=white, margin=0];
+    node[shape=box, style=rounded, fontname=sans,                 fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+        0[label = "all", color = "0.22 0.6 0.85", style="rounded"];
+        1[label = "processed_nanoplot", color = "0.07 0.6 0.85", style="rounded"];
+        2[label = "process_nanopore", color = "0.02 0.6 0.85", style="rounded"];
+        3[label = "porechop", color = "0.59 0.6 0.85", style="rounded"];
+        4[label = "filtlong", color = "0.17 0.6 0.85", style="rounded"];
+        5[label = "concat_nanopore", color = "0.12 0.6 0.85", style="rounded"];
+        6[label = "download_nanopore\nsample: SRR30810013", color = "0.20 0.6 0.85", style="rounded"];
+        7[label = "hybridspades", color = "0.49 0.6 0.85", style="rounded"];
+        8[label = "process_illumina", color = "0.44 0.6 0.85", style="rounded"];
+        9[label = "fastp", color = "0.57 0.6 0.85", style="rounded"];
+        10[label = "normalize", color = "0.30 0.6 0.85", style="rounded"];
+        11[label = "dedupe", color = "0.15 0.6 0.85", style="rounded"];
+        12[label = "repair", color = "0.32 0.6 0.85", style="rounded"];
+        13[label = "concat_ilmn", color = "0.00 0.6 0.85", style="rounded"];
+        14[label = "download_illumina\nsample: SRR30810013", color = "0.25 0.6 0.85", style="rounded"];
+        15[label = "spades", color = "0.35 0.6 0.85", style="rounded"];
+        16[label = "miniasm", color = "0.64 0.6 0.85", style="rounded"];
+        17[label = "hybrid_unicycler", color = "0.62 0.6 0.85", style="rounded"];
+        18[label = "nanopore_unicycler", color = "0.47 0.6 0.85", style="rounded"];
+        19[label = "flye", color = "0.52 0.6 0.85", style="rounded"];
+        20[label = "skesa", color = "0.37 0.6 0.85", style="rounded"];
+        21[label = "annotate_assembly\nassembler: spades", color = "0.54 0.6 0.85", style="rounded"];
+        22[label = "annotate_assembly\nassembler: skesa", color = "0.54 0.6 0.85", style="rounded"];
+        23[label = "annotate_assembly\nassembler: flye", color = "0.54 0.6 0.85", style="rounded"];
+        24[label = "annotate_assembly\nassembler: miniasm", color = "0.54 0.6 0.85", style="rounded"];
+        25[label = "annotate_assembly\nassembler: nanopore_unicycler", color = "0.54 0.6 0.85", style="rounded"];
+        26[label = "annotate_assembly\nassembler: hybridspades", color = "0.54 0.6 0.85", style="rounded"];
+        27[label = "annotate_assembly\nassembler: hybrid_unicycler", color = "0.54 0.6 0.85", style="rounded"];
+        1 -> 0
+        7 -> 0
+        8 -> 0
+        15 -> 0
+        16 -> 0
+        17 -> 0
+        18 -> 0
+        19 -> 0
+        20 -> 0
+        21 -> 0
+        22 -> 0
+        23 -> 0
+        24 -> 0
+        25 -> 0
+        26 -> 0
+        27 -> 0
+        2 -> 1
+        3 -> 2
+        4 -> 3
+        5 -> 4
+        6 -> 5
+        8 -> 7
+        9 -> 8
+        10 -> 9
+        11 -> 10
+        12 -> 11
+        13 -> 12
+        14 -> 13
+        8 -> 15
+        2 -> 16
+        8 -> 17
+        2 -> 17
+        2 -> 18
+        2 -> 19
+        8 -> 20
+        15 -> 21
+        20 -> 22
+        19 -> 23
+        16 -> 24
+        18 -> 25
+        7 -> 26
+        17 -> 27
+}      
